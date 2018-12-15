@@ -3,6 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorApp1">#f7ad1a</color>
+    <color name="colorApp1">#26a952</color>
+    <color name="colorApp2">#22ac42</color>
     <color name="colorAppLight">#28f7ad1a</color>
+    <color name="colorSimpleText">#1c2529</color>
+    <color name="colorBg">#d7d7d7</color>
+
+    <color name="black">#000</color>
+    <color name="lightorange">#fdf2df</color>
+    <color name="lightorangedark">#ebd6ab</color>
+
 </resources>

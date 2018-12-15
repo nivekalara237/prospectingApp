@@ -1,4 +1,4 @@
-package com.niveka_team_dev.prospectingapp;
+package com.niveka_team_dev.prospectingapp.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -22,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
+import com.niveka_team_dev.prospectingapp.R;
+import com.niveka_team_dev.prospectingapp.Session;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

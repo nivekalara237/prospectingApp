@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">prospecting</string>
+    <string name="prospects_enregistr_s">Prospects enregistrés</string>
+    <string name="text0001">Aucune impression donnée</string>
+    <string name="text0002">par:</string>
 </resources>

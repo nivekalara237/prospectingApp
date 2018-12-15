@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".activities.LoginActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:visibility="gone"
@@ -34,8 +34,8 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:gravity="center"
-            android:textColor="#f7ad1a"
-            android:background="#28f7ad1a"
+            android:textColor="@color/colorApp2"
+            android:background="#1f00b62e"
             android:layout_marginTop="16dp"
             android:text="Prospecting"
             android:textAllCaps="true"
@@ -103,7 +103,7 @@
             android:layout_marginTop="16dp"
             android:text="Register or Login"
             android:textAllCaps="false"
-            android:background="#f7ad1a"
+            android:background="@color/colorApp1"
             android:paddingLeft="30dp"
             android:textColor="#ffffff"
             android:textStyle="bold"

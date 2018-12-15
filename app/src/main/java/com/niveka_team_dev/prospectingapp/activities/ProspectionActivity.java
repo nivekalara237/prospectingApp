@@ -1,7 +1,8 @@
-package com.niveka_team_dev.prospectingapp;
+package com.niveka_team_dev.prospectingapp.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,26 +11,28 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.niveka_team_dev.prospectingapp.R;
+import com.niveka_team_dev.prospectingapp.Utils;
 import com.niveka_team_dev.prospectingapp.models.Prospect;
 
-import org.w3c.dom.Text;
-
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class ProspectionActivity extends AppCompatActivity {
+public class ProspectionActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
 
     public final static String ERROR_ID = "error_id";
 
@@ -38,15 +41,17 @@ public class ProspectionActivity extends AppCompatActivity {
     @BindView(R.id.email) EditText email;
     @BindView(R.id.location) EditText location;
     @BindView(R.id.impression) EditText impression;
-    @BindView(R.id.save)
-    Button save;
-    @BindView(R.id.error)
-    TextView error;
+    @BindView(R.id.save) Button save;
+    @BindView(R.id.error) TextView error;
+    @BindView(R.id.radio_suivi) RadioButton radio_suivi;
+    @BindView(R.id.radio_prospect) RadioButton radio_prospect;
+    @BindView(R.id.radiogroup) RadioGroup radio_group;
 
     public ProgressDialog progressDialog;
     DatabaseReference rootRef,propectsRef;
     FirebaseUser auth;
     String errorTxt = "";
+    int radioChecked = -1;
 
     @Override
     public void onSaveInstanceState(Bundle state){
@@ -61,6 +66,7 @@ public class ProspectionActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance().getCurrentUser();
         //auth.getUid();
         ButterKnife.bind(this);
+        radio_group.setOnCheckedChangeListener(this);
 
         if (savedInstanceState!=null){
             errorTxt = savedInstanceState.getString(ERROR_ID);
@@ -70,7 +76,7 @@ public class ProspectionActivity extends AppCompatActivity {
 
         //database reference pointing to root of database
         rootRef = FirebaseDatabase.getInstance().getReference();
-        propectsRef = rootRef.child("prospecting").child("prospects");
+        propectsRef = rootRef.child(Utils.FIREBASE_DB_NAME).child("prospects");
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,22 +122,31 @@ public class ProspectionActivity extends AppCompatActivity {
             Toast.makeText(this, "Vous devez renseigner l'email et le numero de telephone, ou bien l'un des deux", Toast.LENGTH_SHORT).show();
         }
 
-        if (!TextUtils.isEmpty(tel) && !em.contains("@")){
+        if (!TextUtils.isEmpty(em) && !em.contains("@")){
             cancel = true;
             focus = email;
             email.setError("Email invalide");
         }
 
+        if (radioChecked == -1){
+            cancel = true;
+            focus = radio_group;
+            //radio_group.setError("Email invalide");
+            radio_group.setBackgroundColor(Color.parseColor("#4AB4040D"));
+        }
+
         if (cancel)
             focus.requestFocus();
         else {
-            saveData(nom,tel,em,loc,impr);
+            saveData(nom,tel,em,loc,impr,radioChecked);
         }
 
     }
 
-    private void saveData(String nom, String tel, String em, String loc, String impr) {
+    private void saveData(String nom, String tel, String em, String loc, String impr,int type) {
         showProgressDialog();
+
+        Date d = Calendar.getInstance().getTime();
 
         Prospect prospect = new Prospect();
         prospect.setId(System.currentTimeMillis());
@@ -141,6 +156,8 @@ public class ProspectionActivity extends AppCompatActivity {
         prospect.setNom(nom);
         prospect.setLocalisation(loc);
         prospect.setTelephone(tel);
+        prospect.setType(type);
+        prospect.setDate(d.getTime());
         Map<String,Object> map = prospect.toMap();
         //String key = propectsRef.getKey();
         propectsRef.push().setValue(map, new DatabaseReference.CompletionListener() {
@@ -190,4 +207,17 @@ public class ProspectionActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        //RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+
+        switch (checkedId){
+            case R.id.radio_prospect:
+              radioChecked = 1;
+              break;
+            case R.id.radio_suivi:
+                radioChecked = 0;
+                break;
+        }
+    }
 }

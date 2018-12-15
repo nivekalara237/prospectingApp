@@ -11,8 +11,27 @@ public class Prospect {
     private String localisation;
     private String impression;
     private String emailUser;
+    private String fb_key;
+    private long date;
+    private int type;
 
     public Prospect(){}
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
+    public String getFb_key() {
+        return fb_key;
+    }
+
+    public void setFb_key(String fb_key) {
+        this.fb_key = fb_key;
+    }
 
     public long getId() {
         return id;
@@ -70,6 +89,14 @@ public class Prospect {
         this.emailUser = emailUser;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public Map<String,Object> toMap(){
         Map<String,Object> map = new HashMap<>();
         map.put("id",id);
@@ -79,7 +106,27 @@ public class Prospect {
         map.put("impression",impression);
         map.put("email",email);
         map.put("emailUser",emailUser);
+        map.put("type",type);
+        map.put("date",date);
+        map.put("fb_key",getFb_key());
 
         return map;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Prospect{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", nom='" + nom + '\'' +
+                ", localisation='" + localisation + '\'' +
+                ", impression='" + impression + '\'' +
+                ", emailUser='" + emailUser + '\'' +
+                ", date=" + date +
+                ", type=" + type +
+                ", fb_key=" + fb_key +
+                '}';
     }
 }

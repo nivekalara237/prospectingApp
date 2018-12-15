@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProspectionActivity">
+    tools:context=".activities.ProspectionActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -112,10 +112,33 @@
             </android.support.design.widget.TextInputLayout>
 
 
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_below="@+id/impression_l"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/radio_prospect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Prospection" />
+
+                <RadioButton
+                    android:id="@+id/radio_suivi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Suivi" />
+            </RadioGroup>
+
             <Button
                 android:layout_width="wrap_content"
                 android:text="Enregistrer"
-                android:layout_below="@+id/impression_l"
+                android:layout_below="@+id/radiogroup"
                 android:layout_marginTop="20dp"
                 android:background="@color/colorApp1"
                 android:paddingLeft="20dp"
