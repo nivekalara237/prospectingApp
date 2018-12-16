@@ -31,8 +31,10 @@
         <activity
             android:name=".activities.ListingProspectsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activities.LoginActivity"
+        <activity
+            android:name=".activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".activities.RegisterActivity"></activity>
     </application>
 
 </manifest>
