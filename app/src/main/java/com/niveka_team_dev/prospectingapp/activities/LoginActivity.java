@@ -3,17 +3,24 @@ package com.niveka_team_dev.prospectingapp.activities;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
-import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,51 +28,150 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.ProviderQueryResult;
 import com.niveka_team_dev.prospectingapp.R;
 import com.niveka_team_dev.prospectingapp.Session;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPasswordAuth";
 
     @BindView(R.id.email) EditText emailET;
+    @BindView(R.id.reset_email) EditText emailResetPassET;
     @BindView(R.id.password) EditText passwordET;
-    @BindView(R.id.repassword) EditText repasswordET;
-    @BindView(R.id.login_b) Button button;
-    @BindView(R.id.password_l2) TextInputLayout loginTL;
+    @BindView(R.id.signup) Button signup_btn;
+    @BindView(R.id.signin) Button sign_btn;
+    @BindView(R.id.signin_2) Button sign_in_btn_swipe;
+    @BindView(R.id.forgotpass_swipe) Button forgot_pass;
+    @BindView(R.id.cardview) CardView cardView;
+    @BindView(R.id.cardview_reset_pass_email) CardView cardview_reset_pass_email;
+    @BindView(R.id.error) TextView error;
+    @BindView(R.id.helpfull) Button helper;
+    @BindView(R.id.bottom_l) LinearLayout bottom_l;
 
+    public Animation uptodown,downtoup,downtoleft;
     private FirebaseAuth firebaseAuth;
     Session session;
 
     @VisibleForTesting
     public ProgressDialog progressDialog;
+    private List<String> errors = new ArrayList<>();
 
     @SuppressLint({"CommitPrefEdits", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login0);
         ButterKnife.bind(this);
         session = new Session(this);
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.useAppLanguage();
 
         if (hasBeenRegister()){
-            repasswordET.setVisibility(View.GONE);
             passwordET.setText(session.retrieveDataString("upass"));
             emailET.setText(session.retrieveDataString("uemail"));
-            loginTL.setVisibility(View.GONE);
-            button.setText("Login");
         }
 
-        setButtonListeners();
+        //setButtonListeners();
+        sign_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+        downtoleft = AnimationUtils.loadAnimation(this,R.anim.righttoleft);
+        downtoup = AnimationUtils.loadAnimation(this,R.anim.downtoup);
+        bottom_l.setAnimation(downtoup);
+        cardView.setAnimation(downtoleft);
+
+    }
+    @OnClick(R.id.forgotpass_swipe)
+    public void forgotpass(View v){
+        cardview_reset_pass_email.setVisibility(View.VISIBLE);
+        cardView.setVisibility(View.GONE);
+        forgot_pass.setVisibility(View.GONE);
+        sign_in_btn_swipe.setVisibility(View.VISIBLE);
+        error.setVisibility(View.GONE);
+        errors.clear();
+    }
+
+    @OnClick(R.id.helpfull)
+    public void helper(View View){
+        Intent i =new Intent(this, HelperActivity.class);
+        i.putExtra("goto","LOGIN_HELPER");
+        startActivity(i);
+    }
+
+    @OnClick(R.id.signin_2)
+    public void swipe_login(View view){
+        cardview_reset_pass_email.setVisibility(View.GONE);
+        cardView.setVisibility(View.VISIBLE);
+        forgot_pass.setVisibility(View.VISIBLE);
+        sign_in_btn_swipe.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.signup)
+    public void signup(View view){
+        startActivity(new Intent(this,RegisterActivity.class));
+    }
+
+    @OnClick(R.id.reset_email_btn)
+    public void reset_email_btn(View V){
+        final String email = emailResetPassET.getText().toString();
+        errors.clear();
+        if (!isEmailValid(email)){
+            errors.add(getString(R.string.text0004));
+            emailResetPassET.setBackground(ContextCompat.getDrawable(this,R.drawable.edittext_rounded_corners_error));;
+            displayError();
+        }else {
+            //validateResetPassword()
+            firebaseAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this,
+                                        "Reset password code has been emailed to "
+                                                + email,
+                                        Toast.LENGTH_SHORT).show();
+                                error.setText(getString(R.string.text0009)+email);
+                                error.setTextColor(Color.WHITE);
+                                error.setBackgroundColor(Color.GREEN);
+                                error.setVisibility(View.VISIBLE);
+                                error.setGravity(Gravity.CENTER);
+                                emailResetPassET.setText("");
+                            } else {
+                                Log.e(TAG, "Error in sending reset password code",
+                                        task.getException());
+                                errors.clear();
+                                errors.add(getString(R.string.text0008));
+                                displayError();
+                            }
+                        }
+                    });
+        }
     }
 
     public boolean isEmailValid(String email){
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void displayError() {
+        if (!errors.isEmpty()){
+            error.setVisibility(View.VISIBLE);
+            StringBuilder errs = new StringBuilder();
+            for (String err:errors){
+                errs.append("* ").append(err).append("\n");
+            }
+            error.setText(errs.toString());
+        }
     }
 
     public boolean isPasswordValid(String pass){
@@ -131,43 +237,36 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         String em = emailET.getText().toString();
         String pass = passwordET.getText().toString();
-        String repass = repasswordET.getText().toString();
         boolean alreadyRegister = !session.retrieveDataString("uemail").equals("");
         emailET.setError(null);
         passwordET.setError(null);
-        repasswordET.setError(null);
 
-        if (TextUtils.isEmpty(em)){
+        if (TextUtils.isEmpty(em) || !isEmailValid(em)){
             cancel = true;
             focus = emailET;
-            emailET.setError("Email obligatoire");
+            errors.remove(getString(R.string.text0010));
+            errors.add(getString(R.string.text0010));
+            setEditTextBackgrounDrawable(emailET,true);
+        }else {
+            errors.remove(getString(R.string.text0010));
+            setEditTextBackgrounDrawable(emailET,false);
         }
-        if (TextUtils.isEmpty(pass)){
+
+
+        if (TextUtils.isEmpty(pass) || !isPasswordValid(pass)){
             cancel = true;
             focus = passwordET;
-            passwordET.setError("Mot de pass obligatoire");
-        }
-
-        if (!isEmailValid(em)){
-            cancel = true;
-            focus = emailET;
-            emailET.setError("Email invalide");
-        }
-
-        if (!isPasswordValid(pass)){
-            cancel = true;
-            focus = passwordET;
-            passwordET.setError("le mode de passe doit avoir au moins 4 caracteres");
-        }
-
-        if (!alreadyRegister && !repass.equals(pass)){
-            cancel = true;
-            focus = repasswordET;
-            repasswordET.setError("Vous saisi un mot de passe different");
+            passwordET.setError(getString(R.string.text0011));
+        }else {
+            errors.remove(getString(R.string.text0011));
+            setEditTextBackgrounDrawable(passwordET,false);
         }
 
         if (cancel)
+        {
             focus.requestFocus();
+            displayError();
+        }
         else
             handleRegistrationLogin();
 
@@ -177,6 +276,14 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         //showAppropriateOptions();
+    }
+
+    public void setEditTextBackgrounDrawable(EditText editText,boolean error){
+        if (error){
+            editText.setBackground(ContextCompat.getDrawable(this,R.drawable.edittext_rounded_corners_error));
+        }else {
+            editText.setBackground(ContextCompat.getDrawable(this,R.drawable.login_edittext_rounded_corners));
+        }
     }
 
     public boolean hasBeenRegister(){
@@ -195,11 +302,15 @@ public class LoginActivity extends AppCompatActivity {
 
         //show progress dialog
         showProgressDialog();
+        performLogin(email, password);
 
         //perform login and account creation depending on existence of email in firebase
-        performLoginOrAccountCreation(email, password);
+        //performLoginOrAccountCreation(email, password);
     }
-    private void performLoginOrAccountCreation(final String email, final String password){
+
+
+
+/*    private void performLoginOrAccountCreation(final String email, final String password){
         firebaseAuth.fetchProvidersForEmail(email).addOnCompleteListener(
                 this, new OnCompleteListener<ProviderQueryResult>() {
                     @Override
@@ -229,7 +340,7 @@ public class LoginActivity extends AppCompatActivity {
                         showAppropriateOptions();
                     }
                 });
-    }
+    }*/
     private void performLogin(final String email, final String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -245,6 +356,10 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this,
                                     "Authentifiation echouée.",
                                     Toast.LENGTH_SHORT).show();
+
+                            errors.clear();
+                            errors.add(task.getException().getMessage());
+                            displayError();
                         }
                         //hide progress dialog
                         hideProgressDialog();
@@ -255,7 +370,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void gotoNextActivity(){
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity( new Intent(this,MainActivity.class));
         finish();
     }
     private void registerAccount(final String email, final String password) {
@@ -380,12 +495,14 @@ public class LoginActivity extends AppCompatActivity {
                                     "Reset password code has been emailed to "
                                             + email,
                                     Toast.LENGTH_SHORT).show();
+                            error.setBackgroundColor(Color.GREEN);
                         } else {
                             Log.e(TAG, "Error in sending reset password code",
                                     task.getException());
-                            Toast.makeText(LoginActivity.this,
-                                    "There is a problem with reset password, try later.",
-                                    Toast.LENGTH_SHORT).show();
+
+                            errors.clear();
+                            errors.add(getString(R.string.text0012));
+                            displayError();
                         }
                     }
                 });

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,79 +7,157 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Application de prospection"
-        android:textColor="@color/colorApp1"
-        android:textSize="20sp"
-        android:padding="16dp"
-        android:layout_marginTop="40dp"
-        android:layout_centerHorizontal="true"
-        />
-
-    <ImageView
-        android:layout_width="200dp"
-        android:id="@+id/icon"
-        android:layout_centerInParent="true"
-        android:tint="@color/colorApp1"
-        android:src="@drawable/web_hi_res_512"
-        android:layout_height="200dp" />
-
-    <LinearLayout
+  <!--  <RelativeLayout
         android:layout_width="match_parent"
-        android:weightSum="2"
-        android:layout_marginBottom="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:visibility="gone"
         android:layout_height="wrap_content">
-        <android.support.v7.widget.CardView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardElevation="15dp"
-            app:cardCornerRadius="4dp"
-            android:layout_marginRight="8dp"
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Application de prospection"
+            android:textColor="@color/colorApp1"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:id="@+id/icon"
+            android:layout_centerInParent="true"
+            android:tint="@color/colorApp1"
+            android:src="@drawable/web_hi_res_512"
+            android:layout_height="200dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:weightSum="2"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:layout_height="wrap_content">
-            <Button
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="15dp"
+                app:cardCornerRadius="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="Nouveau prospect"
+                    android:textAllCaps="false"
+                    android:paddingRight="40dp"
+                    android:paddingLeft="40dp"
+                    android:textSize="11sp"
+                    android:onClick="addProspect"
+                    android:background="@color/colorApp2"
+                    android:textColor="#fff"
+                    android:layout_height="match_parent" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="15dp"
+                app:cardCornerRadius="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="Voir les prospects"
+                    android:textAllCaps="false"
+                    android:paddingRight="40dp"
+                    android:textSize="11sp"
+                    android:paddingLeft="40dp"
+                    android:onClick="listProspects"
+                    android:background="@color/colorApp2"
+                    android:textColor="#fff"
+                    android:layout_height="match_parent" />
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+
+    </RelativeLayout>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/background"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/l1"
+            android:background="@color/colorApp2"
+            android:layout_marginBottom="44dp"
+            android:layout_height="wrap_content">
+            <ImageView
                 android:layout_width="match_parent"
-                android:text="Nouveau prospect"
-                android:textAllCaps="false"
-                android:paddingRight="40dp"
-                android:paddingLeft="40dp"
-                android:textSize="11sp"
-                android:onClick="addProspect"
-                android:background="@color/colorApp2"
-                android:textColor="#fff"
+                android:src="@drawable/web_hi_res_512"
+                android:layout_height="240dp" />
+        </RelativeLayout>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/colorWrite"
+            app:contentPadding="0dp"
+            android:id="@+id/cardview_search"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="25dp"
+            android:layout_above="@+id/l2"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="match_parent"
+                android:fontFamily="@font/futura_medium_bt"
+                android:hint="@string/text0013"
+                android:background="@drawable/bg_search_edittext"
+                android:drawablePadding="8dp"
+                android:drawableRight="@drawable/ic_search_black_24dp"
                 android:layout_height="match_parent" />
         </android.support.v7.widget.CardView>
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/l2"
+            android:layout_below="@+id/l1"
+            android:layout_height="400dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/text0014"
+                android:textColor="@color/lightorange"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:fontFamily="@font/futura_book_font"
+                android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.CardView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardElevation="15dp"
-            app:cardCornerRadius="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_height="wrap_content">
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:text="Voir les prospects"
-                android:textAllCaps="false"
-                android:paddingRight="40dp"
-                android:textSize="11sp"
-                android:paddingLeft="40dp"
-                android:onClick="listProspects"
-                android:background="@color/colorApp2"
-                android:textColor="#fff"
-                android:layout_height="match_parent" />
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
+                android:id="@+id/ll1"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="wrap_content"
 
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 
-
-</RelativeLayout>
+</ScrollView>

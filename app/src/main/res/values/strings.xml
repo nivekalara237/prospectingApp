@@ -3,4 +3,24 @@
     <string name="prospects_enregistr_s">Prospects enregistrés</string>
     <string name="text0001">Aucune impression donnée</string>
     <string name="text0002">par:</string>
+    <string name="sign_up">Sign up</string>
+    <string name="username">Username</string>
+    <string name="password">Mot de passe</string>
+    <string name="repassword">Confirmez mot de passe</string>
+    <string name="email">Votre Adresse E-mail</string>
+    <string name="sign_in">Sign in</string>
+    <string name="code_group">Code de votre groupe</string>
+    <string name="text0003">Code invalide</string>
+    <string name="text0004">Adresse E-mail invalide</string>
+    <string name="text0005">Mot de passe érroné</string>
+    <string name="text0006">Vous avec saisi un mot de passe différent</string>
+    <string name="text0007">Besoin d\'aide?</string>
+    <string name="forgot_pass">Forgot password?</string>
+    <string name="text0008">There is a problem with reset password, try later.</string>
+    <string name="text0009">Reset password code has been emailed to</string>
+    <string name="text0010">Email obligatoire</string>
+    <string name="text0011">Mot de passe érroné</string>
+    <string name="text0012">There is a problem with reset password, try later.</string>
+    <string name="text0013">Saerch into...</string>
+    <string name="text0014">Are you looking for?</string>
 </resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <gradient android:angle="90" android:endColor="@color/colorApp1" android:startColor="@color/colorApp1" android:type="linear" />
+
+                    <solid
+                        android:color="@color/colorApp2"/>
+                    <stroke
+                        android:width="3dp"
+                        android:color="@color/colorApp1" />
+                    <corners android:radius="30dp" />
+
+                    <padding
+                        android:bottom="3dp"
+                        android:left="13dp"
+                        android:right="10dp"
+                        android:top="3dp" />
+                </shape>
+            </item>
+            <item >
+                <bitmap
+                    android:gravity="start|center"
+                    android:src="@drawable/common_google_signin_btn_icon_disabled" />
+            </item>
+            <item android:right="5dp">
+                <bitmap
+                    android:gravity="center_vertical|right"
+                    android:src="@drawable/common_google_signin_btn_icon_disabled" />
+            </item>
+        </layer-list>
+    </item>
+</selector>

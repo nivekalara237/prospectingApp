@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  res/drawable/edittext_rounded_corners.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--    <item android:state_pressed="true" android:state_focused="true">
+        <shape>
+            <solid android:color="@color/colorApp1"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorApp1" />
+            <corners
+                android:radius="15dip" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="true" android:state_focused="false">
+        <shape>
+            <solid android:color="@color/colorApp1"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorApp1" />
+            <corners
+                android:radius="15dip" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="false" android:state_focused="true">
+        <shape>
+            <solid android:color="#FFFFFF"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorApp1" />
+            <corners
+                android:radius="15dip" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="false" android:state_focused="false">
+        <shape>
+            <gradient
+                android:startColor="#F2F2F2"
+                android:centerColor="#FFFFFF"
+                android:endColor="#FFFFFF"
+                android:angle="90"
+                />
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorApp1" />
+            <corners
+                android:radius="15dip" />
+            <size
+                android:height="40dp"/>
+        </shape>
+    </item>-->
+
+    <item>
+        <shape>
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="6dp"
+                android:bottom="10dp"
+                />
+            <solid
+                android:color="@color/colorAppLight"/>
+            <stroke
+                android:width="1.3dp"
+                android:color="@color/lightorangedark" />
+            <corners
+                android:radius="30dp" />
+        </shape>
+    </item>
+</selector>
