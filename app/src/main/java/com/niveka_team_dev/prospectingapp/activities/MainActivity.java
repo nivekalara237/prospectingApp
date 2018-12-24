@@ -26,4 +26,29 @@ public class MainActivity extends AppCompatActivity {
         i.setClass(this, ListingProspectsActivity.class);
         startActivity(i);
     }
+
+    public void forum(View view) {
+        Intent i = new Intent();
+        i.setClass(this, ForumCommerciauxActivity.class);
+        startActivity(i);
+    }
+
+    public void reporter(View view) {
+        Intent i = new Intent();
+        i.setClass(this, ReporterActivity.class);
+        startActivity(i);
+    }
+
+    public void listReporter(View view) {
+        Intent i = new Intent();
+        i.setClass(this, ReporterActivity.class);
+        startActivity(i);
+    }
+
+    public void helpfull(View view) {
+        Intent i = new Intent();
+        i.setClass(this, HelperActivity.class);
+        i.putExtra("goto","MAIN_HELPER");
+        startActivity(i);
+    }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">prospecting</string>
+    <string name="app_name">FirePROSP</string>
     <string name="prospects_enregistr_s">Prospects enregistrés</string>
     <string name="text0001">Aucune impression donnée</string>
     <string name="text0002">par:</string>
@@ -21,6 +21,30 @@
     <string name="text0010">Email obligatoire</string>
     <string name="text0011">Mot de passe érroné</string>
     <string name="text0012">There is a problem with reset password, try later.</string>
-    <string name="text0013">Saerch into...</string>
+    <string name="text0013">Search into main…</string>
     <string name="text0014">Are you looking for?</string>
+    <string name="text0015">Mes Prospections</string>
+    <string name="text0016">Prospecter</string>
+    <string name="reporter">Reporter</string>
+    <string name="text0017">Mes Rapports</string>
+    <string name="text0018">Forum Commerciaux</string>
+    <string name="text0019">De l\'aide?</string>
+    <string name="text0020">Prospection</string>
+    <string name="text0021">Nom et prenom(prospect | client)</string>
+    <string name="text0022">Numero de téléphone</string>
+    <string name="text0023">Adresse E-mail</string>
+    <string name="text0024">Localisation (Quartier)[optionnel]</string>
+    <string name="text0025">Impression du prospect|client</string>
+    <string name="text0026">Suivi</string>
+    <string name="add">ajouter</string>
+    <string name="text0027">Se connecter</string>
+    <string name="text0028">S\'inscrire</string>
+    <string name="text0029">Contenu du rapport</string>
+    <string name="text0030">Mettre en copie</string>
+    <string name="text0031">Objet du rapport</string>
+    <string name="text0032">Info technique</string>
+    <string name="text0033">Info générale</string>
+    <string name="text0034">Rapport professionnel</string>
+    <string name="text0035">Votre nom d\'utilisateur(Optionel)</string>
+    <string name="text0039">Hier à</string>
 </resources>

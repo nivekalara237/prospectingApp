@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:emojicon="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/leftLayout"
+        android:paddingTop="8dp">
+
+        <ImageView
+            android:id="@+id/letf_image_message_profile"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/circle"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/letf_message_name"
+            android:text="John Doe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:fontFamily="@font/futura_medium_bt"
+            android:layout_toRightOf="@+id/letf_image_message_profile"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="6dp" />
+
+        <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
+            android:id="@+id/letf_message_body"
+            android:text="hi man, how are you? dddsds  sd s d s s d s d s d s d  s d"
+            android:background="@drawable/rounded_rectangle_message_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="240dp"
+            android:padding="8dp"
+            android:textSize="12sp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/futura_medium_bt"
+            android:layout_below="@+id/letf_message_name"
+            android:layout_toRightOf="@+id/letf_image_message_profile"
+            android:layout_toEndOf="@+id/letf_image_message_profile"
+            android:layout_marginLeft="8dp" />
+
+        <TextView
+            android:id="@+id/letf_message_time"
+            android:text="11:40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="8sp"
+            android:layout_toRightOf="@+id/letf_message_body"
+            android:layout_marginLeft="4dp"
+            android:textColor="@color/lightyellow"
+            android:fontFamily="@font/futura_medium_bt"
+            android:layout_below="@+id/letf_message_body" />
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="60dp"
+        android:layout_below="@+id/leftLayout"
+        android:id="@+id/rightLayout"
+        android:clipToPadding="false">
+
+        <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rigth_message_body"
+            android:background="@drawable/rounded_rectangle_message_right"
+            android:textColor="@color/lightorangedark"
+            android:padding="8dp"
+            android:elevation="2dp"
+            android:textSize="12sp"
+            android:maxWidth="240dp"
+            android:layout_alignParentRight="true"
+            android:text="Placeholder message :( :D"
+            android:fontFamily="@font/futura_medium_bt"
+            android:layout_alignParentEnd="true"
+            emojicon:emojiconSize="45sp"
+            emojicon:emojiconUseSystemDefault="true" />
+        <TextView
+            android:id="@+id/right_message_time"
+            android:text="11:40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="8sp"
+            android:layout_toLeftOf="@+id/right_message_seen"
+            android:layout_marginRight="4dp"
+            android:layout_below="@+id/rigth_message_body"
+            android:textColor="@color/lightyellow"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/futura_medium_bt"/>
+        <ImageView
+            android:id="@+id/right_message_seen"
+            android:text="11:40"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/ic_double_check_24dp"
+            android:tint="@color/lightyellow"
+            android:layout_below="@+id/rigth_message_body"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -94,12 +94,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:id="@+id/l1"
-            android:background="@color/colorApp2"
+            android:layout_marginLeft="-5dp"
+            android:background="@drawable/landscape_savana"
             android:layout_marginBottom="44dp"
-            android:layout_height="wrap_content">
+            android:layout_height="300dp">
             <ImageView
                 android:layout_width="match_parent"
-                android:src="@drawable/web_hi_res_512"
+                android:visibility="gone"
+                android:src="@drawable/ic_fire_128dp"
                 android:layout_height="240dp" />
         </RelativeLayout>
         <android.support.v7.widget.CardView
@@ -121,38 +123,288 @@
                 android:background="@drawable/bg_search_edittext"
                 android:drawablePadding="8dp"
                 android:drawableRight="@drawable/ic_search_black_24dp"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:drawableEnd="@drawable/ic_search_black_24dp" />
         </android.support.v7.widget.CardView>
         
         <RelativeLayout
             android:layout_width="match_parent"
             android:id="@+id/l2"
             android:layout_below="@+id/l1"
-            android:layout_height="400dp">
+            android:paddingBottom="10dp"
+            android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/text0014"
                 android:textColor="@color/lightorange"
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"
+                android:id="@+id/textview"
                 android:fontFamily="@font/futura_book_font"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:id="@+id/ll1"
+                android:layout_below="@+id/textview"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="42dp"
+                android:layout_marginLeft="42dp"
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
                 <android.support.v7.widget.CardView
                     android:layout_width="0dp"
                     android:layout_weight="0.5"
-                    android:layout_height="wrap_content">
+                    android:layout_marginRight="4dp"
+                    app:contentPadding="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="listProspects"
+                    android:foreground="@android:drawable/list_selector_background"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:layout_height="110dp">
                     <RelativeLayout
+                        android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_height="wrap_content">
                         <ImageView
-                            android:layout_width="wrap_content"
+                            android:layout_width="70dp"
+                            android:src="@drawable/ic_list_128dp"
+                            android:tint="@color/colorApp3"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/list_icon"
+                            android:layout_height="70dp" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/text0015"
+                            android:textColor="@color/lightorangedark"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/futura_light_bt"
+                            android:layout_below="@+id/list_icon"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    app:contentPadding="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="addProspect"
+                    android:foreground="@android:drawable/list_selector_background"
+                    android:layout_marginLeft="4dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:layout_height="110dp">
+                    <RelativeLayout
+                        android:background="@android:color/transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:src="@drawable/ic_advertising_prospection_128dp"
+                            android:tint="@color/colorApp3"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/list_advertising"
+                            android:layout_height="70dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/text0016"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/futura_light_bt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lightorangedark"
+                            android:layout_below="@+id/list_advertising"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:id="@+id/space1"
+                android:background="#152220"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_below="@+id/ll1"
+                android:visibility="invisible"
+                android:layout_marginRight="42dp"
+                android:layout_marginLeft="42dp"
+                android:layout_height="2dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/ll2"
+                android:layout_below="@+id/space1"
+                android:layout_marginRight="42dp"
+                android:layout_marginLeft="42dp"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_marginRight="4dp"
+                    app:contentPadding="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="reporter"
+                    android:foreground="@android:drawable/list_selector_background"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:layout_height="110dp">
+                    <RelativeLayout
+                        android:background="@android:color/transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:src="@drawable/ic_newpaper_128dp"
+                            android:tint="@color/colorApp3"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/icon_newpaper"
+                            android:layout_height="70dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/reporter"
+                            android:textColor="@color/lightorangedark"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/futura_light_bt"
+                            android:layout_below="@+id/icon_newpaper"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_marginLeft="4dp"
+                    app:contentPadding="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="listReporter"
+                    android:foreground="@android:drawable/list_selector_background"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:layout_height="110dp">
+                    <RelativeLayout
+                        android:background="@android:color/transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:src="@drawable/ic_list_128dp"
+                            android:tint="@color/colorApp3"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/list_icon2"
+                            android:layout_height="70dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/text0017"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/futura_light_bt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lightorangedark"
+                            android:layout_below="@+id/list_icon2"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:id="@+id/space2"
+                android:background="#152220"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_below="@+id/ll2"
+                android:layout_marginRight="42dp"
+                android:visibility="invisible"
+                android:layout_marginLeft="42dp"
+                android:layout_height="2dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/ll3"
+                android:layout_below="@+id/space2"
+                android:layout_marginRight="42dp"
+                android:layout_marginLeft="42dp"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_marginRight="4dp"
+                    app:contentPadding="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="forum"
+                    android:foreground="@android:drawable/list_selector_background"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:layout_height="110dp">
+                    <RelativeLayout
+                        android:background="@android:color/transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:src="@drawable/ic_group_forum_128dp"
+                            android:tint="@color/colorApp3"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/icon_forum"
+                            android:layout_height="70dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/text0018"
+                            android:textColor="@color/lightorangedark"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/futura_light_bt"
+                            android:layout_below="@+id/icon_forum"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_marginLeft="4dp"
+                    app:contentPadding="2dp"
+                    android:clickable="true"
+                    android:onClick="helpfull"
+                    android:focusable="true"
+                    android:foreground="@android:drawable/list_selector_background"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:layout_height="110dp">
+                    <RelativeLayout
+                        android:background="@android:color/transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:src="@drawable/ic_info_128dp"
+                            android:tint="@color/colorWrite"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/info_icon"
+                            android:layout_height="70dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/text0019"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/futura_light_bt"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWrite"
+                            android:layout_below="@+id/info_icon"
                             android:layout_height="wrap_content" />
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>

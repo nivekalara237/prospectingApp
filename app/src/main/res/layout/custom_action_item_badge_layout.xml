@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="?android:actionButtonStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:clickable="true"
+    android:id="@+id/notiflayout"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/toolbar_pro_img"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:foreground="?android:selectableItemBackground"
+        app:srcCompat="@drawable/ic_notification_modern_32dp"
+        android:layout_marginRight="8dp"
+        android:layout_gravity="right|center_vertical"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/cart_badge"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="right|end|top"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/futura_light_italic_font"
+        android:background="@drawable/badge_background"
+        android:gravity="center"
+        android:padding="3dp"
+        android:textColor="@android:color/white"
+        android:text="0"
+        android:textSize="7sp"
+        tools:ignore="RtlHardcoded" />
+
+</FrameLayout>

@@ -43,8 +43,8 @@ public class WelcomeActivity extends AppCompatActivity {
         l2.setAnimation(downtoup);
 
         if (hasBeenRegister()){
-            //startActivity(new Intent(this,MainActivity.class));
-            //finish();
+            startActivity(new Intent(this,MainActivity.class));
+            finish();
         }
 
     }

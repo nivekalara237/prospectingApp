@@ -21,4 +21,31 @@
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
 
+    <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColorHint">@color/colorApp3</item>
+        <item name="android:fontFamily">@font/futura_medium_bt</item>
+    </style>
+
+    <style name="TextLabel2" parent="TextAppearance.AppCompat">
+
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColorHint">@color/colorApp3</item>
+        <item name="android:fontFamily">@font/futura_medium_bt</item>
+
+        <item name="colorAccent">@color/colorApp3</item>
+        <item name="colorControlActivated">@color/colorApp3</item>
+        <item name="colorControlNormal">@color/colorApp3</item>
+    </style>
+
+    <style name="TextLabel3" parent="TextAppearance.AppCompat">
+
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/futura_medium_bt</item>
+
+        <item name="colorAccent">@android:color/transparent</item>
+        <item name="colorControlActivated">@android:color/transparent</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
+    </style>
+
 </resources>

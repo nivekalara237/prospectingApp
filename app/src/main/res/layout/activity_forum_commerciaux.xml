@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rootView"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background"
+    tools:context=".activities.ForumCommerciauxActivity">
+    <include
+        layout="@layout/toolbar"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/message_swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/recyclerView"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:fastScrollThumbEnabled="false"
+            android:paddingBottom="16dp"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_forum_edittext_attach_icon"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:visibility="visible"
+            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/send"
+            android:id="@+id/editTextLayout"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:padding="3dp"
+                android:id="@+id/emoji"
+                android:tint="@color/colorApp3"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_happy_32dp"/>
+
+            <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+                android:id="@+id/new_message"
+                emojicon:emojiconSize="16sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="tape a message"
+                android:maxLines="5"
+                android:minLines="1"
+                android:inputType="textMultiLine"
+                android:gravity="center_vertical|start"
+                android:fontFamily="@font/futura_medium_bt"
+                android:padding="3dp"
+                android:textSize="14sp"
+                android:background="@android:color/transparent"
+                android:layout_width="0dp" />
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:padding="3dp"
+                android:id="@+id/attachment"
+                android:tint="@color/colorApp3"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_clip_attach_32dp"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="fitCenter"
+            android:padding="6dp"
+            android:id="@+id/send"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:foreground="@android:drawable/list_selector_background"
+            android:tint="@color/colorApp3"
+            android:background="@drawable/bg_forum_edittext_attach_icon"
+            android:src="@drawable/ic_send_1_32dp"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -28,11 +28,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.niveka_team_dev.prospectingapp.R;
 import com.niveka_team_dev.prospectingapp.Session;
+import com.niveka_team_dev.prospectingapp.Utils;
+import com.niveka_team_dev.prospectingapp.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public Animation uptodown,downtoup,downtoleft;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference userRef,rootRef,channel_users,channels;
     Session session;
 
     @VisibleForTesting
@@ -72,10 +82,17 @@ public class LoginActivity extends AppCompatActivity {
         session = new Session(this);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.useAppLanguage();
+        rootRef = FirebaseDatabase.getInstance().getReference();
+        userRef = rootRef.child(Utils.FIREBASE_DB_NAME).child("users");
+        channel_users = rootRef.child(Utils.FIREBASE_DB_NAME).child("channel_users");
+        channels = rootRef.child(Utils.FIREBASE_DB_NAME).child("channels");
 
         if (hasBeenRegister()){
             passwordET.setText(session.retrieveDataString("upass"));
             emailET.setText(session.retrieveDataString("uemail"));
+
+            //startActivity(new Intent(this,MainActivity.class));
+            //finish();
         }
 
         //setButtonListeners();
@@ -91,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         cardView.setAnimation(downtoleft);
 
     }
+
+
     @OnClick(R.id.forgotpass_swipe)
     public void forgotpass(View v){
         cardview_reset_pass_email.setVisibility(View.VISIBLE);
@@ -350,7 +369,14 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "login success",Toast.LENGTH_SHORT).show();
                             session.saveDataString("uemail",email);
                             session.saveDataString("upass",password);
-                            gotoNextActivity();
+
+                            String uid = task.getResult().getUser().getUid();
+                            User user = new User();
+                            user.setUid(uid);
+                            user.setEmail(email);
+                            userRef.child(uid).addValueEventListener(userValueEventListener);
+
+                            //gotoNextActivity();
                         } else {
                             Log.e(TAG, "Login fail", task.getException());
                             Toast.makeText(LoginActivity.this,
@@ -368,6 +394,34 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    ValueEventListener userValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            User user = dataSnapshot.getValue(User.class);
+            //Log.e("U1111111",dataSnapshot.getValue().toString());
+            if(user!=null){
+                //assert user != null;
+                session.saveDataString("user",user.toJson().toString());
+                //Log.e("U1111111",user.toString());
+                //Log.e("U2222222",user.toJson().toString());
+                gotoNextActivity();
+            }else {
+                errors.clear();
+                errors.add("Un probleme est survenu. Svp réessayez!!");
+                displayError();
+            }
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            Log.e("onCancelled",databaseError.getMessage());
+            errors.clear();
+            errors.add("Un probleme est survenu. Svp réessayez!!");
+            displayError();
+        }
+    };
 
     void gotoNextActivity(){
         startActivity( new Intent(this,MainActivity.class));

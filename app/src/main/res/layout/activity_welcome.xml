@@ -54,8 +54,9 @@
             android:layout_gravity="center"
             android:textColor="#ffffff"
             android:layout_marginRight="16dp"
+            android:textAllCaps="false"
             android:background="@drawable/buttonstyle2"
-            android:text="Se loguer" />
+            android:text="@string/text0027" />
 
         <Button
             android:id="@+id/signin"
@@ -67,7 +68,7 @@
             android:layout_weight="3.5"
             android:textAllCaps="false"
             android:background="@drawable/buttonstyle"
-            android:text="S'inscrire" />
+            android:text="@string/text0028" />
     </LinearLayout>
 
 

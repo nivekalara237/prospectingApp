@@ -6,7 +6,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorApp1">#26a952</color>
     <color name="colorApp2">#22ac42</color>
-    <color name="colorAppLight">#28f7ad1a</color>
+    <color name="colorAppLight">#1df7ad1a</color>
     <color name="colorSimpleText">#1c2529</color>
     <color name="colorBg">#d7d7d7</color>
 
@@ -17,5 +17,7 @@
     <color name="colorBack">#0e181d</color>
     <color name="colorWrite">#ffffff</color>
     <color name="colorError">#d73f10</color>
+    <color name="colorApp3">#e3692b</color>
+    <color name="colorBlack1">#101518</color>
 
 </resources>
