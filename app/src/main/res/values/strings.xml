@@ -60,4 +60,7 @@
     <string name="forum_com_title">Forum Commerc…</string>
     <string name="a_propos">A propos?</string>
     <string name="d_connexion">Déconnexion</string>
+    <string name="report_list_title">Reportings</string>
+    <string name="prospecting_list_title"><![CDATA[Prospect & Client]]></string>
+    <string name="text0047">Prospection enregistrée avec succès</string>
 </resources>

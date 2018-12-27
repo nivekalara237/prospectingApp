@@ -239,7 +239,9 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
                 }else{
                     hideProgressDialog();
                     Toasty.success(context,"Rapport enregister avec succès",Toast.LENGTH_SHORT,false);
-                    startActivity(new Intent(context,MainActivity.class));
+                    Intent i = new Intent(context,MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
                 }
 
             }

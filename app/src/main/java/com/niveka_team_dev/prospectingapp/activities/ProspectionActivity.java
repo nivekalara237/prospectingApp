@@ -208,7 +208,7 @@ public class ProspectionActivity extends AppCompatActivity implements RadioGroup
                 if (databaseError!=null){
                     errors.add(databaseError.getMessage());
                 }else {
-                    Toasty.success(ProspectionActivity.this, "Prospection enregistrée avec succès", Toast.LENGTH_SHORT).show();
+                    Toasty.success(ProspectionActivity.this, getString(R.string.text0047), Toast.LENGTH_SHORT).show();
                     gotoMain();
                 }
                 displayError();
@@ -219,7 +219,9 @@ public class ProspectionActivity extends AppCompatActivity implements RadioGroup
     }
 
     private void gotoMain(){
-        startActivity(new Intent(this,MainActivity.class));
+        Intent i = new Intent(this,MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
         finish();
     }
 
@@ -265,7 +267,7 @@ public class ProspectionActivity extends AppCompatActivity implements RadioGroup
         @Override
         public void onReceive(Context context, Intent intent) {
             ProspectionActivity.this.gpsLocation = intent.getParcelableExtra("loc");
-            Log.e("LOC",intent.getParcelableExtra("loc").toString());
+            //Log.e("LOC",intent.getParcelableExtra("loc").toString());
         }
     };
 

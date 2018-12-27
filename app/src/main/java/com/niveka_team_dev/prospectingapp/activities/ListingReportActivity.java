@@ -61,7 +61,7 @@ public class ListingReportActivity extends BaseActivity implements OnRVBottomRea
         toolbarHandler
                 .initUI()
                 .setBadgeContent("0")
-                .setTitle(getString(R.string.forum_com_title))
+                .setTitle(getString(R.string.report_list_title))
                 .build();
 
         //end toolbar

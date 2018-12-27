@@ -86,7 +86,7 @@ public class ListingProspectsActivity extends AppCompatActivity implements OnRVB
         toolbarHandler
                 .initUI()
                 .setBadgeContent("0")
-                .setTitle(getString(R.string.forum_com_title))
+                .setTitle(getString(R.string.prospecting_list_title))
                 .build();
 
         //end toolbar
