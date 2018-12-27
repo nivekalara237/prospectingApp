@@ -171,6 +171,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/colorApp3"
                         android:fontFamily="@font/futura_medium_bt"
                         android:textSize="12sp"
                         android:text="@string/text0020" />
@@ -182,6 +183,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/futura_medium_bt"
                         android:textSize="12sp"
+                        android:textColor="@color/colorApp3"
                         android:text="@string/text0026" />
                 </RadioGroup>
 
