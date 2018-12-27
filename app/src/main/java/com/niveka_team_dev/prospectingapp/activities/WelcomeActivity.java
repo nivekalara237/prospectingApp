@@ -13,8 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.niveka_team_dev.prospectingapp.R;
-import com.niveka_team_dev.prospectingapp.Session;
-import com.niveka_team_dev.prospectingapp.ui.RadarView;
+import com.niveka_team_dev.prospectingapp.kernels.Session;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

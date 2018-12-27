@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.niveka_team_dev.prospectingapp.Session;
+import com.niveka_team_dev.prospectingapp.kernels.Session;
 import com.niveka_team_dev.prospectingapp.activities.LoginActivity;
 import com.niveka_team_dev.prospectingapp.models.User;
 

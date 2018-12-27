@@ -1,9 +1,12 @@
 package com.niveka_team_dev.prospectingapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class Prospect {
+public class Prospect implements Parcelable{
     private long id;
     private String email;
     private String telephone;
@@ -14,8 +17,43 @@ public class Prospect {
     private String fb_key;
     private long date;
     private int type;
+    private String position;
 
     public Prospect(){}
+
+    protected Prospect(Parcel in) {
+        id = in.readLong();
+        email = in.readString();
+        telephone = in.readString();
+        nom = in.readString();
+        localisation = in.readString();
+        impression = in.readString();
+        emailUser = in.readString();
+        fb_key = in.readString();
+        date = in.readLong();
+        type = in.readInt();
+        position = in.readString();
+    }
+
+    public static final Creator<Prospect> CREATOR = new Creator<Prospect>() {
+        @Override
+        public Prospect createFromParcel(Parcel in) {
+            return new Prospect(in);
+        }
+
+        @Override
+        public Prospect[] newArray(int size) {
+            return new Prospect[size];
+        }
+    };
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
 
     public long getDate() {
         return date;
@@ -108,6 +146,7 @@ public class Prospect {
         map.put("emailUser",emailUser);
         map.put("type",type);
         map.put("date",date);
+        map.put("position",position);
         map.put("fb_key",getFb_key());
 
         return map;
@@ -126,7 +165,28 @@ public class Prospect {
                 ", emailUser='" + emailUser + '\'' +
                 ", date=" + date +
                 ", type=" + type +
+                ", position=" + position +
                 ", fb_key=" + fb_key +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(email);
+        parcel.writeString(telephone);
+        parcel.writeString(nom);
+        parcel.writeString(localisation);
+        parcel.writeString(impression);
+        parcel.writeString(emailUser);
+        parcel.writeString(fb_key);
+        parcel.writeLong(date);
+        parcel.writeInt(type);
+        parcel.writeString(position);
     }
 }

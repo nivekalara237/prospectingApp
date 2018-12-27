@@ -9,10 +9,9 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.niveka_team_dev.prospectingapp.R;
-import com.niveka_team_dev.prospectingapp.Utils;
+import com.niveka_team_dev.prospectingapp.utilities.Utils;
 import com.niveka_team_dev.prospectingapp.holders.ListProspectsViewHolder;
 import com.niveka_team_dev.prospectingapp.listeners.OnRVBottomReachedListener;
 import com.niveka_team_dev.prospectingapp.models.Prospect;
@@ -75,7 +74,10 @@ public class ListingProspectsAdapter extends RecyclerView.Adapter<ListProspectsV
         else
             holder.nomUser.setVisibility(View.GONE);
 
-
+        if (prospect.getType() == Utils.TYPE_PROSPECTION.PROSPECTION){
+            holder.type.setText(R.string.text0042);
+        }else
+            holder.type.setText(R.string.text0041);
 
         if (/*position%Utils.MAX_PROSPECTS_TO_DISPLAY_PER_PAGE==0 && */position == prospects.size()-1){
             onRVBottomReachedListener.onBottomReached(position,true);
@@ -93,6 +95,12 @@ public class ListingProspectsAdapter extends RecyclerView.Adapter<ListProspectsV
         notifyItemRemoved(prospects.indexOf(prospect));
         prospects.add(prospect);
         notifyItemChanged(prospects.size());
+        notifyDataSetChanged();
+    }
+
+    public void setAllItems(List<Prospect> prospectList) {
+        prospects.clear();
+        prospects.addAll(prospectList);
         notifyDataSetChanged();
     }
 }

@@ -31,19 +31,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.niveka_team_dev.prospectingapp.R;
-import com.niveka_team_dev.prospectingapp.Session;
-import com.niveka_team_dev.prospectingapp.Utils;
+import com.niveka_team_dev.prospectingapp.kernels.Session;
+import com.niveka_team_dev.prospectingapp.ui.CustomProgressDialogOne;
+import com.niveka_team_dev.prospectingapp.utilities.Utils;
 import com.niveka_team_dev.prospectingapp.models.Channel;
 import com.niveka_team_dev.prospectingapp.models.User;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
     List<String> errors = new ArrayList<>();
     @VisibleForTesting
     public ProgressDialog progressDialog;
+    private CustomProgressDialogOne customProgressDialogOne;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
         channel_user_ref = rootref.child(Utils.FIREBASE_DB_NAME).child("channel_users");
         channels = rootref.child(Utils.FIREBASE_DB_NAME).child("channels");
 
+        customProgressDialogOne = new CustomProgressDialogOne(this)
+                .builder()
+                .setMessage("Please wait!");
         session = new Session(this);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.useAppLanguage();
@@ -258,7 +256,7 @@ public class RegisterActivity extends AppCompatActivity {
                             channel_user_ref.push().setValue(chuser);
                             session.saveDataString("user",user.toJson().toString());
 
-                            Log.e("USER",user.toJson().toString());
+                            //Log.e("USER",user.toJson().toString());
 
                             gotoNextActivity();
                         } else {
@@ -304,18 +302,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Please wait!");
-            progressDialog.setIndeterminate(true);
+        if (customProgressDialogOne == null) {
+            customProgressDialogOne = new CustomProgressDialogOne(this)
+                    .builder()
+                    .setMessage("Please wait!");
+            //progressDialog.setIndeterminate(true);
         }
-        progressDialog.show();
+        customProgressDialogOne.show();
     }
 
     public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
+        customProgressDialogOne.dismiss();
     }
 
 }

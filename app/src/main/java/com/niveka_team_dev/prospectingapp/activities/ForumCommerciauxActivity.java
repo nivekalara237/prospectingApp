@@ -5,10 +5,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.niveka_team_dev.prospectingapp.R;
-import com.niveka_team_dev.prospectingapp.Utils;
+import com.niveka_team_dev.prospectingapp.ui.ToolbarHandler;
+import com.niveka_team_dev.prospectingapp.utilities.Utils;
 import com.niveka_team_dev.prospectingapp.adapters.ForumComMessageAdapter;
 import com.niveka_team_dev.prospectingapp.kernels.BaseActivity;
 import com.niveka_team_dev.prospectingapp.models.Message;
@@ -38,6 +37,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 
@@ -65,6 +65,7 @@ public class ForumCommerciauxActivity extends BaseActivity {
     private ForumComMessageAdapter adapter;
     private DatabaseReference rootRef,messageChannelRef,usersRef;
     boolean isVisibleEmoji = false;
+    private ToolbarHandler toolbarHandler;
 
     @SuppressLint("ResourceType")
     @Override
@@ -73,6 +74,27 @@ public class ForumCommerciauxActivity extends BaseActivity {
         setContentView(R.layout.activity_forum_commerciaux);
         ButterKnife.bind(this);
         context = this;
+
+        //toolbar
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowCustomEnabled();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        toolbarHandler = new ToolbarHandler(this,toolbar);
+        toolbarHandler
+                .initUI()
+                .setBadgeContent("0")
+                .setTitle(getString(R.string.forum_com_title))
+                .build();
+
+        //end toolbar
+
+
+
         rootRef = FirebaseDatabase.getInstance().getReference();
         messageChannelRef = rootRef.child(Utils.FIREBASE_DB_NAME).child("forum-"+currentUser.getChannelID());
         usersRef = rootRef.child(Utils.FIREBASE_DB_NAME).child("users");
@@ -107,7 +129,7 @@ public class ForumCommerciauxActivity extends BaseActivity {
         final LinearLayoutManager layoutManager = new  LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setStackFromEnd(true);
-        layoutManager.setReverseLayout(true);
+        //layoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(layoutManager);
         //messageChannelRef.addChildEventListener(childEventListener);
         usersForum.add(currentUser);
@@ -150,13 +172,15 @@ public class ForumCommerciauxActivity extends BaseActivity {
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError==null){
                     //Toasty.success(context,"Message envoyé",Toast.LENGTH_SHORT,false);
-                    new_message.setTag("");
+                    new_message.setText("");
+                    scrolldToBottom();
+                    //recyclerView.getLayoutManager().scrollToPosition(me);
                 }else{
-
+                    Toasty.success(context,"Message non envoyé", Toast.LENGTH_SHORT,false).show();
                 }
             }
         });
-        new_message.setTag("");
+        new_message.setText("");
     }
 
     ValueEventListener usersEvent = new ValueEventListener() {
@@ -245,8 +269,12 @@ public class ForumCommerciauxActivity extends BaseActivity {
         Query messageQuery = messageChannelRef.limitToLast(mCurrentPage * Utils.TOTAL_MESSAGE_ITEMS_TO_LOAD);
         messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.exists()){
+                    if (!messages.isEmpty()){
+                        Log.e("FIRST",messages.get(0).getBody());
+                        Log.e("LAST",messages.get(messages.size()-1).getBody());
+                    }
                     Message message = dataSnapshot.getValue(Message.class);
                     itemPos++;
                     if(itemPos == 1){
@@ -256,9 +284,13 @@ public class ForumCommerciauxActivity extends BaseActivity {
                     }
                     message.setKey(dataSnapshot.getKey());
                     message.setSender(searchInListUser(message.getId()));
+
                     messages.add(message);
-                    adapter.addEntry(message);
+                    //adapter.addEntry(message);
+                    adapter.notifyDataSetChanged();
+                    //adapter.notifyItemInserted(messages.size()-1);
                     recyclerView.scrollToPosition(messages.size() - 1);
+                    //scrolldToBottom();
                     mRefreshLayout.setRefreshing(false);
                     if (!message.isSeen() && message.getSenderId()!=currentUser.getId()){
                         markAsSeen(message);
@@ -267,22 +299,28 @@ public class ForumCommerciauxActivity extends BaseActivity {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.exists()) {
+                    Message message = dataSnapshot.getValue(Message.class);
+                    messages.set(messages.indexOf(adapter.searchInListMessage(message.getKey())), message);
+                    adapter.notifyItemChanged(messages.indexOf(adapter.searchInListMessage(message.getKey())));
+                    adapter.notifyDataSetChanged();
+                    //adapter.updateEntry(message);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -293,18 +331,22 @@ public class ForumCommerciauxActivity extends BaseActivity {
 
     private void loadMoreMessages() {
 
-        Query messageQuery = messageChannelRef.orderByKey().endAt(mLastKey).limitToLast(Utils.TOTAL_MESSAGE_ITEMS_TO_LOAD);
+        String lastKey = messages.isEmpty()?"xxx":messages.get(0).getKey();
+        Query messageQuery = messageChannelRef.orderByKey().endAt(lastKey).limitToLast(Utils.TOTAL_MESSAGE_ITEMS_TO_LOAD);
 
         messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Message message = dataSnapshot.getValue(Message.class);
                 String messageKey = dataSnapshot.getKey();
+                //Log.e("FIRST",messages.get(0).getBody());
+                Log.e("LAST__000 = ",messages.get(messages.size()-1).getBody());
                 if(!mPrevKey.equals(messageKey)){
                     message.setKey(dataSnapshot.getKey());
                     message.setSender(searchInListUser(message.getId()));
                     messages.add(itemPos++, message);
-                    adapter.addEntryToTop(message);
+                    //adapter.addEntryToTop(message);
+                    adapter.notifyDataSetChanged();
                     if (!message.isSeen() && message.getSenderId()!=currentUser.getId()){
                         markAsSeen(message);
                     }
@@ -323,22 +365,22 @@ public class ForumCommerciauxActivity extends BaseActivity {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
 
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

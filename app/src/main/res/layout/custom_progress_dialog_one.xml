@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:padding="8dp"
+        android:background="@color/colorBlueDark"
+        android:layout_gravity="center">
+
+        <ProgressBar
+            android:id="@+id/imgVw_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:indeterminateDrawable="@drawable/my_progress" />
+
+        <TextView
+            android:id="@+id/tv_progressmsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="Chargement..."
+            android:fontFamily="@font/futura_medium_bt"
+            android:textColor="@color/colorWrite"
+            android:textSize="22sp"
+            android:textStyle=""
+            android:layout_toRightOf="@+id/imgVw_progress" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,6 +1,6 @@
 package com.niveka_team_dev.prospectingapp;
 
-import android.util.Log;
+import com.niveka_team_dev.prospectingapp.utilities.Utils;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

@@ -19,5 +19,10 @@
     <color name="colorError">#d73f10</color>
     <color name="colorApp3">#e3692b</color>
     <color name="colorBlack1">#101518</color>
+    <color name="c4">#c7e3692b</color>
+    <color name="c3">#91e3692b</color>
+    <color name="c2">#66e3692b</color>
+    <color name="c1">#2ae3692b</color>
+    <color name="c0">#00e3692b</color>
 
 </resources>

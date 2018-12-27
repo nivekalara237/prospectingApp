@@ -17,6 +17,8 @@ public class ListProspectsViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.user) public TextView nomUser;
     @BindView(R.id.impression) public TextView impression;
     @BindView(R.id.localisation_client) public TextView localisation;
+    @BindView(R.id.type) public TextView type;
+
     public ListProspectsViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);

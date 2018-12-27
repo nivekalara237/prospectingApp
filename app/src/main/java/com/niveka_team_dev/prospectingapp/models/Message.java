@@ -1,5 +1,8 @@
 package com.niveka_team_dev.prospectingapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -7,7 +10,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Message implements Serializable {
+public class Message implements Serializable,Parcelable {
     private long id;
     private String body;
     private String time;
@@ -22,6 +25,30 @@ public class Message implements Serializable {
 
     public Message() {
     }
+
+    protected Message(Parcel in) {
+        id = in.readLong();
+        body = in.readString();
+        time = in.readString();
+        channelID = in.readString();
+        key = in.readString();
+        senderId = in.readLong();
+        receiverId = in.readLong();
+        senderName = in.readString();
+        seen = in.readByte() != 0;
+    }
+
+    public static final Creator<Message> CREATOR = new Creator<Message>() {
+        @Override
+        public Message createFromParcel(Parcel in) {
+            return new Message(in);
+        }
+
+        @Override
+        public Message[] newArray(int size) {
+            return new Message[size];
+        }
+    };
 
     public boolean isSeen() {
         return seen;
@@ -134,5 +161,23 @@ public class Message implements Serializable {
         map.put("receiverId",receiverId);
         map.put("seen",seen);
         return map;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(body);
+        parcel.writeString(time);
+        parcel.writeString(channelID);
+        parcel.writeString(key);
+        parcel.writeLong(senderId);
+        parcel.writeLong(receiverId);
+        parcel.writeString(senderName);
+        parcel.writeByte((byte) (seen ? 1 : 0));
     }
 }

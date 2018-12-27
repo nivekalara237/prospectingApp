@@ -27,21 +27,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.niveka_team_dev.prospectingapp.R;
-import com.niveka_team_dev.prospectingapp.Session;
-import com.niveka_team_dev.prospectingapp.Utils;
+import com.niveka_team_dev.prospectingapp.kernels.Session;
+import com.niveka_team_dev.prospectingapp.ui.CustomProgressDialogOne;
+import com.niveka_team_dev.prospectingapp.utilities.Utils;
 import com.niveka_team_dev.prospectingapp.models.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @VisibleForTesting
     public ProgressDialog progressDialog;
+    private CustomProgressDialogOne customProgressDialogOne;
     private List<String> errors = new ArrayList<>();
 
     @SuppressLint({"CommitPrefEdits", "SetTextI18n"})
@@ -94,6 +93,9 @@ public class LoginActivity extends AppCompatActivity {
             //startActivity(new Intent(this,MainActivity.class));
             //finish();
         }
+        customProgressDialogOne = new CustomProgressDialogOne(this)
+                                        .builder()
+                                        .setMessage("Please wait!");
 
         //setButtonListeners();
         sign_btn.setOnClickListener(new View.OnClickListener() {
@@ -197,60 +199,6 @@ public class LoginActivity extends AppCompatActivity {
         return pass.length() >= 4;
     }
 
-    private void setButtonListeners(){
-        //login button
-        findViewById(R.id.login_b).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                attemptLogin();
-                //handleRegistrationLogin();
-            }
-        });
-        //reset password - for unauthenticated user
-        findViewById(R.id.rest_password_b).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendResetPasswordEmail();
-            }
-        });
-
-        //logout button
-        findViewById(R.id.logout_b).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
-        });
-
-        //Verify email button
-        findViewById(R.id.verify_b).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendEmailVerificationMsg();
-            }
-        });
-
-        //update password - for signed in user
-        findViewById(R.id.update_password_b).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updatePassword();
-            }
-        });
-
-        //Order functionality to show how to secure firestore data
-        //using firebase authentication and firestore security rules
-        findViewById(R.id.order_b).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent();
-                i.setClass(LoginActivity.this, MainActivity.class);
-                startActivity(i);
-            }
-        });
-    }
-
     private void attemptLogin() {
         View focus = null;
         boolean cancel = false;
@@ -327,39 +275,6 @@ public class LoginActivity extends AppCompatActivity {
         //performLoginOrAccountCreation(email, password);
     }
 
-
-
-/*    private void performLoginOrAccountCreation(final String email, final String password){
-        firebaseAuth.fetchProvidersForEmail(email).addOnCompleteListener(
-                this, new OnCompleteListener<ProviderQueryResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "checking to see if user exists in firebase or not");
-                            ProviderQueryResult result = task.getResult();
-
-                            if(result != null && result.getProviders()!= null
-                                    && result.getProviders().size() > 0){
-                                Log.d(TAG, "User exists, trying to login using entered credentials");
-                                performLogin(email, password);
-                            }else{
-                                Log.d(TAG, "User doesn't exist, creating account");
-                                registerAccount(email, password);
-                            }
-                        } else {
-                            Log.w(TAG, "User check failed", task.getException());
-                            Toast.makeText(LoginActivity.this,
-                                    "There is a problem, please try again later.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                        //hide progress dialog
-                        hideProgressDialog();
-                        //enable and disable login, logout buttons depending on signin status
-                        showAppropriateOptions();
-                    }
-                });
-    }*/
     private void performLogin(final String email, final String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -427,30 +342,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity( new Intent(this,MainActivity.class));
         finish();
     }
-    private void registerAccount(final String email, final String password) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "account created");
-                            Toast.makeText(LoginActivity.this, "Compte créer avec succès", Toast.LENGTH_SHORT).show();
-                            session.saveDataString("uemail",email);
-                            session.saveDataString("upass",password);
-                            gotoNextActivity();
-                        } else {
-                            Log.d(TAG, "register account failed", task.getException());
-                            Toast.makeText(LoginActivity.this,
-                                    "account registration failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        //hide progress dialog
-                        hideProgressDialog();
-                        //enable and disable login, logout buttons depending on signin status
-                        showAppropriateOptions();
-                    }
-                });
-    }
+
     private boolean validateEmailPass(String email , String password) {
         boolean valid = true;
 
@@ -476,14 +368,22 @@ public class LoginActivity extends AppCompatActivity {
 
         return valid;
     }
-    private boolean validateResetPassword(String password) {
-        boolean valid = true;
-        if (TextUtils.isEmpty(password) || password.length() < 6) {
-            valid = false;
-        }
-        return valid;
-    }
+
     public void showProgressDialog() {
+        if (customProgressDialogOne == null) {
+            customProgressDialogOne = new CustomProgressDialogOne(this)
+                    .builder()
+                    .setMessage(getString(R.string.text0046));
+            //progressDialog.setIndeterminate(true);
+        }
+        customProgressDialogOne.show();
+    }
+
+    public void hideProgressDialog() {
+        customProgressDialogOne.dismiss();
+    }
+
+  /*  public void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Please wait!");
@@ -496,104 +396,11 @@ public class LoginActivity extends AppCompatActivity {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-    }
+    }*/
     private void showAppropriateOptions(){
-        /*hideProgressDialog();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            findViewById(R.id.login_items).setVisibility(View.GONE);
-            findViewById(R.id.logout_items).setVisibility(View.VISIBLE);
 
-            findViewById(R.id.verify_b).setEnabled(!user.isEmailVerified());
-        } else {
-            findViewById(R.id.login_items).setVisibility(View.VISIBLE);
-            findViewById(R.id.logout_items).setVisibility(View.GONE);
-        }*/
-        //gotoNextActivity();
     }
 
-    private void sendEmailVerificationMsg() {
-        findViewById(R.id.verify_b).setEnabled(false);
-
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        findViewById(R.id.verify_b).setEnabled(true);
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this,
-                                    "Verification email has been sent to " + user.getEmail(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e(TAG, "Error in sending verification email",
-                                    task.getException());
-                            Toast.makeText(LoginActivity.this,
-                                    "Failed to send verification email.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-    //non-singed in user reset password email
-    private void sendResetPasswordEmail() {
-        final String email = ((EditText) findViewById(R.id.reset_password_email))
-                .getText().toString();
-        firebaseAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this,
-                                    "Reset password code has been emailed to "
-                                            + email,
-                                    Toast.LENGTH_SHORT).show();
-                            error.setBackgroundColor(Color.GREEN);
-                        } else {
-                            Log.e(TAG, "Error in sending reset password code",
-                                    task.getException());
-
-                            errors.clear();
-                            errors.add(getString(R.string.text0012));
-                            displayError();
-                        }
-                    }
-                });
-    }
-
-    private void updatePassword() {
-
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
-        final String newPwd = ((EditText) findViewById(R.id.update_password_t)).getText().toString();
-        if(!validateResetPassword(newPwd)){
-            Toast.makeText(LoginActivity.this,
-                    "Invalid password, please enter valid password",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        user.updatePassword(newPwd)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this,
-                                    "Password has been updated",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e(TAG, "Error in updating passowrd",
-                                    task.getException());
-                            Toast.makeText(LoginActivity.this,
-                                    "Failed to update passwrod.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-    private void logOut() {
-        firebaseAuth.signOut();
-        showAppropriateOptions();
-    }
     @Override
     public void onStop() {
         super.onStop();

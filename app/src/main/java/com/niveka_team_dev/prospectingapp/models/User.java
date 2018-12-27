@@ -114,6 +114,7 @@ public class User implements Serializable{
         map.put("id",getId());
         map.put("uid",getUid());
         map.put("sexe",getSexe());
+        map.put("email",getEmail());
         map.put("username",getUsername());
         map.put("password",getPassword());
         map.put("channelID",getChannelID());

@@ -1,8 +1,10 @@
-package com.niveka_team_dev.prospectingapp;
+package com.niveka_team_dev.prospectingapp.kernels;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.niveka_team_dev.prospectingapp.utilities.Utils;
 
 public class Session {
     private SharedPreferences prefs;

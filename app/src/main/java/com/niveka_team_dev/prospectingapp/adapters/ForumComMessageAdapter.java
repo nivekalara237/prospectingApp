@@ -2,7 +2,6 @@ package com.niveka_team_dev.prospectingapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,14 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.amulyakhare.textdrawable.TextDrawable;
 import com.github.thunder413.datetimeutils.DateTimeUnits;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.niveka_team_dev.prospectingapp.R;
-import com.niveka_team_dev.prospectingapp.Utils;
+import com.niveka_team_dev.prospectingapp.utilities.Utils;
 import com.niveka_team_dev.prospectingapp.holders.ForumComMessageViewHolder;
 import com.niveka_team_dev.prospectingapp.models.Message;
-import com.niveka_team_dev.prospectingapp.models.User;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.Date;
@@ -50,8 +47,6 @@ public class ForumComMessageAdapter extends RecyclerView.Adapter<ForumComMessage
         String date = Utils.convertJodaTimeToReadable(message.getTime());
         DateTimeUtils.setTimeZone("UTC");
 
-        Log.e("ME-THIER",me+" -- "+message.getSenderId());
-
         if (me != message.getSenderId()){
             holder.leftLayout.setVisibility(View.VISIBLE);
             holder.rightLayout.setVisibility(View.GONE);
@@ -59,12 +54,12 @@ public class ForumComMessageAdapter extends RecyclerView.Adapter<ForumComMessage
             holder.left_message_name.setText(message.getSenderName());
             //holder.left_message_time.setText(message.getTime());
             //if (message)
-            TextDrawable drawable = TextDrawable.builder()
-                    .buildRect(message.getSenderName().substring(0,1), Utils.randomColor());
-            holder.left_imageProfile.setImageDrawable(drawable);
+//            TextDrawable drawable = TextDrawable.builder()
+//                    .buildRect(message.getSenderName().substring(0,1), Utils.randomColor());
+//            holder.left_imageProfile.setImageDrawable(drawable);
 
 
-            if (DateTimeUtils.isDateTime(date)){
+            if (DateTimeUtils.isToday(date)){
                 if (DateTimeUtils.getDateDiff(new Date(),date, DateTimeUnits.MINUTES) < 6)
                     holder.left_message_time.setText("");
                 else {
@@ -74,10 +69,8 @@ public class ForumComMessageAdapter extends RecyclerView.Adapter<ForumComMessage
                 holder.left_message_time.setText(context.getString(R.string.text0039)+DateTimeUtils.formatTime(date,true));
             }else {
                 //DateTimeUtils.formatWithPattern("2017-06-13", "EEEE, MMMM dd, yyyy"); // Tuesday, June 13, 2017
-                holder.left_message_time.setText(DateTimeUtils.formatWithPattern(Utils.getDateToJoda(message.getTime()), "EEEE, dd MMMM yyyy"));
+                holder.left_message_time.setText(DateTimeUtils.formatWithPattern(date, "EEEE, dd MMMM yyyy"));
             }
-
-
         }else {
             holder.leftLayout.setVisibility(View.GONE);
             holder.rightLayout.setVisibility(View.VISIBLE);

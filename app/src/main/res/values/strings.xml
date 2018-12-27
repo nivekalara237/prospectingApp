@@ -47,4 +47,17 @@
     <string name="text0034">Rapport professionnel</string>
     <string name="text0035">Votre nom d\'utilisateur(Optionel)</string>
     <string name="text0039">Hier à</string>
+    <string name="text0040">Tous</string>
+    <string name="text0041">[ suivi ]</string>
+    <string name="text0042">[ prospection ]</string>
+    <string name="multi_select_dialog_title">Mettre en copie</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="text0043">aucune</string>
+    <string name="text0044">[ Technique ]</string>
+    <string name="text0045">[ Générele ]</string>
+    <string name="text0046">Please wait!</string>
+    <string name="forum_com_title">Forum Commerc…</string>
+    <string name="a_propos">A propos?</string>
+    <string name="d_connexion">Déconnexion</string>
 </resources>

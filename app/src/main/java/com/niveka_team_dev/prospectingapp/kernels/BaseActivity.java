@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.niveka_team_dev.prospectingapp.R;
-import com.niveka_team_dev.prospectingapp.Session;
 import com.niveka_team_dev.prospectingapp.activities.LoginActivity;
 import com.niveka_team_dev.prospectingapp.handlers.UserHelpers;
 import com.niveka_team_dev.prospectingapp.models.User;
