@@ -60,4 +60,10 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="RadioButtonStyle" parent="AppTheme">
+        <item name="colorControlNormal">@color/colorApp3</item>
+        <item name="colorAccent">@color/colorApp3</item>
+        <item name="android:textColorSecondary">@color/lightorange</item>
+    </style>
+
 </resources>

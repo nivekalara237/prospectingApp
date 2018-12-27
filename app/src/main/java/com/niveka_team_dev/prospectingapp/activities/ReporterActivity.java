@@ -38,6 +38,9 @@ import com.niveka_team_dev.prospectingapp.kernels.BaseActivity;
 import com.niveka_team_dev.prospectingapp.models.Rapport;
 import com.niveka_team_dev.prospectingapp.models.User;
 
+import net.ralphpina.permissionsmanager.PermissionsManager;
+import net.ralphpina.permissionsmanager.PermissionsResult;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +49,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
+import rx.functions.Action1;
 
 public class ReporterActivity extends BaseActivity implements ValueEventListener,RadioGroup.OnCheckedChangeListener {
 
@@ -72,7 +76,7 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
             if (dataSnapshot.exists()){
                 User u = dataSnapshot.getValue(User.class);
                 users.add(u);
-                Log.e("USERS",u.toString());
+                //Log.e("USERS",u.toString());
             }
         }
 
@@ -153,6 +157,7 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         setContentView(R.layout.activity_reporter);
         ButterKnife.bind(this);
         context = this;
+        onAskForLocation();
         rootRef = FirebaseDatabase.getInstance().getReference();
         reportRef = rootRef.child(Utils.FIREBASE_DB_NAME).child("reportings");
         usersRef = rootRef.child(Utils.FIREBASE_DB_NAME).child("users");
@@ -160,7 +165,7 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         radioGroup.setOnCheckedChangeListener(this);
         customProgressDialogOne = new CustomProgressDialogOne(this)
                 .builder()
-                .setMessage("Please wait!");
+                .setMessage(getString(R.string.text0046));
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,12 +193,12 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         if (TextUtils.isEmpty(obj)){
             focus = objet;
             cancel = true;
-            errors.add(" objet obligatoire");
+            errors.add(getString(R.string.text0049));
         }
         if (TextUtils.isEmpty(cont)){
             focus = contenu;
             cancel = true;
-            errors.add("le contenu ne doit pas etre vide");
+            errors.add(getString(R.string.text0050));
         }
 
 
@@ -227,23 +232,20 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         Map<String,Object> mapUpdate = new HashMap<>();
         mapUpdate.put(key,map);
         reportRef.updateChildren(mapUpdate, new DatabaseReference.CompletionListener() {
-            @SuppressLint("CheckResult")
             @Override
-            public void onComplete( DatabaseError databaseError, DatabaseReference databaseReference) {
+            public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError!=null){
                     errors.clear();
                     errors.add(databaseError.getMessage());
                     displayError();
                     hideProgressDialog();
-                    //Toasty.success(context,"Rapport enregister avec succès",Toast.LENGTH_SHORT,false);
                 }else{
                     hideProgressDialog();
-                    Toasty.success(context,"Rapport enregister avec succès",Toast.LENGTH_SHORT,false);
+                    Toasty.success(context,getString(R.string.text0048),Toast.LENGTH_SHORT,false).show();
                     Intent i = new Intent(context,MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 }
-
             }
         });
     }
@@ -315,7 +317,7 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         @Override
         public void onReceive(Context context, Intent intent) {
             ReporterActivity.this.gpsLocation = intent.getParcelableExtra("loc");
-            Log.e("LOC",intent.getParcelableExtra("loc").toString());
+            //Log.e("LOC",intent.getParcelableExtra("loc").toString());
         }
     };
 
@@ -329,7 +331,7 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         if (customProgressDialogOne == null) {
             customProgressDialogOne = new CustomProgressDialogOne(this)
                     .builder()
-                    .setMessage("Please wait!");
+                    .setMessage(getString(R.string.text0046));
             //progressDialog.setIndeterminate(true);
         }
         customProgressDialogOne.show();
@@ -337,5 +339,21 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
 
     public void hideProgressDialog() {
         customProgressDialogOne.dismiss();
+    }
+    public void onAskForLocation() {
+        if (!PermissionsManager.get().isLocationGranted()) {
+            PermissionsManager.get()
+                    .requestLocationPermission()
+                    .subscribe(new Action1<PermissionsResult>() {
+                        @Override
+                        public void call(PermissionsResult permissionsResult) {
+
+                            Toast.makeText(ReporterActivity.this,
+                                    permissionsResult.isGranted() ? getString(R.string.text0056) : getString(R.string.text0057),
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+        }
     }
 }

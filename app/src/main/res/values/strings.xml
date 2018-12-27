@@ -63,4 +63,14 @@
     <string name="report_list_title">Reportings</string>
     <string name="prospecting_list_title"><![CDATA[Prospect & Client]]></string>
     <string name="text0047">Prospection enregistrée avec succès</string>
+    <string name="text0048">Rapport enregister avec succès</string>
+    <string name="text0049">l\'objet est obligatoire</string>
+    <string name="text0050">le contenu ne doit pas être vide</string>
+    <string name="text0051">Nom Client obligatoire</string>
+    <string name="text0052">Localisation obligatoire</string>
+    <string name="text0053">Téléphone ou email obligatoire</string>
+    <string name="text0054">Vous devez renseigner l\'email et le numero de telephone, ou bien l\'un des deux</string>
+    <string name="text0055">Email invalide</string>
+    <string name="text0056">User granted location.</string>
+    <string name="text0057">User denied location.</string>
 </resources>

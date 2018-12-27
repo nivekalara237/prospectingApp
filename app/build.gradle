@@ -78,6 +78,8 @@ dependencies {
 
     implementation 'com.jackandphantom.android:blurimage:1.2.0'
     implementation 'com.github.abumoallim:Android-Multi-Select-Dialog:v1.9'
+    implementation 'com.github.ralphpina:Android-Permissions-Manager:v2.0.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

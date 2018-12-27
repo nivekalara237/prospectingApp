@@ -6,6 +6,8 @@ import com.niveka_team_dev.prospectingapp.handlers.FontsOverride;
 import com.zplesac.connectionbuddy.ConnectionBuddy;
 import com.zplesac.connectionbuddy.ConnectionBuddyConfiguration;
 
+import net.ralphpina.permissionsmanager.PermissionsManager;
+
 public class App extends Application {
 
     @Override
@@ -19,6 +21,7 @@ public class App extends Application {
 
         ConnectionBuddyConfiguration networkInspectorConfiguration = new ConnectionBuddyConfiguration.Builder(this).build();
         ConnectionBuddy.getInstance().init(networkInspectorConfiguration);
+        PermissionsManager.init(this);
 
 
         //EmojiCompat.Config config = new BundledEmojiCompatConfig(this);
