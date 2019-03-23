@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SuiviActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/recyclerView"
+        android:layout_below="@+id/toolbar"
+        app:stackFromEnd="false"
+        android:padding="3dp"
+        android:paddingBottom="32dp"
+        android:paddingTop="@dimen/dimen_16"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:layout_height="match_parent"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:text="@string/add_new"
+        android:textAllCaps="false"
+        android:id="@+id/add"
+        android:layout_marginBottom="4dp"
+        android:textColor="@color/colorWrite"
+        android:background="@drawable/buttonstyle4"
+        android:fontFamily="@font/futura_medium_bt"
+        android:textSize="14sp"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="30dp" />
+
+</RelativeLayout>

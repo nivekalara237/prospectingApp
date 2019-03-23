@@ -40,7 +40,7 @@ public class WelcomeActivity extends AppCompatActivity {
         downtoup = AnimationUtils.loadAnimation(this,R.anim.downtoup);
         l1.setAnimation(uptodown);
         l2.setAnimation(downtoup);
-
+        startActivity(new Intent(this,MainActivity.class));
         if (hasBeenRegister()){
             startActivity(new Intent(this,MainActivity.class));
             finish();

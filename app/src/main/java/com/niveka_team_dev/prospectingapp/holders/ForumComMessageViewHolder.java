@@ -3,6 +3,8 @@ package com.niveka_team_dev.prospectingapp.holders;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +25,17 @@ public class ForumComMessageViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.right_message_time) public TextView right_message_time;
     @BindView(R.id.leftLayout) public RelativeLayout leftLayout;
     @BindView(R.id.rightLayout) public RelativeLayout rightLayout;
+
+    @BindView(R.id.imageLeftLayout) public RelativeLayout imageLeftLayout;
+    @BindView(R.id.imageRightLayout) public RelativeLayout imageRightLayout;
+    @BindView(R.id.right_progress_value) public TextView rigth_progress_value;
+    @BindView(R.id.left_progress_value) public TextView left_progress_value;
+    @BindView(R.id.right_file_progress_bar) public ProgressBar right_file_progress_bar;
+    @BindView(R.id.left_file_progress_bar) public ProgressBar left_file_progress_bar;
+    @BindView(R.id.leftErrorLayout) public LinearLayout leftErrorLayout;
+    @BindView(R.id.rightErrorLayout) public LinearLayout rightErrorLayout;
+    @BindView(R.id.right_attachement) public ImageView right_attachement;
+    @BindView(R.id.left_attachement) public ImageView left_attachement;
 
     public ForumComMessageViewHolder(View itemView) {
         super(itemView);

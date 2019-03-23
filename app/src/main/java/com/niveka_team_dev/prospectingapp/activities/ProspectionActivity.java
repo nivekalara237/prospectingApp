@@ -295,7 +295,6 @@ public class ProspectionActivity extends AppCompatActivity implements RadioGroup
                  .subscribe(new Action1<PermissionsResult>() {
                      @Override
                      public void call(PermissionsResult permissionsResult) {
-
                          Toast.makeText(ProspectionActivity.this,
                                  permissionsResult.isGranted() ? getString(R.string.text0056) : getString(R.string.text0057),
                                  Toast.LENGTH_SHORT)

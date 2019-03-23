@@ -30,28 +30,43 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.niveka_team_dev.prospectingapp.R;
+import com.niveka_team_dev.prospectingapp.common.ApiError;
+import com.niveka_team_dev.prospectingapp.common.RetrofitBuilder;
+import com.niveka_team_dev.prospectingapp.handlers.TokenManager;
+import com.niveka_team_dev.prospectingapp.handlers.UserHelpers;
 import com.niveka_team_dev.prospectingapp.kernels.Session;
+import com.niveka_team_dev.prospectingapp.models.AccessToken;
+import com.niveka_team_dev.prospectingapp.services.api.AuthApiService;
 import com.niveka_team_dev.prospectingapp.ui.CustomProgressDialogOne;
 import com.niveka_team_dev.prospectingapp.utilities.Utils;
 import com.niveka_team_dev.prospectingapp.models.Channel;
 import com.niveka_team_dev.prospectingapp.models.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPasswordAuth";
+    private static Pattern userNamePattern = Pattern.compile("^[a-z0-9_-]{6,14}$");
 
     @BindView(R.id.email) EditText emailET;
-    @BindView(R.id.code_group) EditText codeGroupeET;
+    @BindView(R.id.code_enterprise) EditText codeGroupeET;
     @BindView(R.id.password) EditText passwordET;
     @BindView(R.id.username) EditText usernameET;
     @BindView(R.id.repassword) EditText repasswordET;
@@ -72,6 +87,8 @@ public class RegisterActivity extends AppCompatActivity {
     @VisibleForTesting
     public ProgressDialog progressDialog;
     private CustomProgressDialogOne customProgressDialogOne;
+    private AuthApiService service;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,44 +96,19 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         context = this;
         ButterKnife.bind(this);
-        rootref = FirebaseDatabase.getInstance().getReference();
-        prospectingRef = rootref.child(Utils.FIREBASE_DB_NAME).child("users");
-        channel_user_ref = rootref.child(Utils.FIREBASE_DB_NAME).child("channel_users");
-        channels = rootref.child(Utils.FIREBASE_DB_NAME).child("channels");
+        tokenManager = TokenManager.getInstance(context);
+        service = RetrofitBuilder.createService(AuthApiService.class);
+        session = new Session(this);
 
         customProgressDialogOne = new CustomProgressDialogOne(this)
                 .builder()
-                .setMessage("Please wait!");
-        session = new Session(this);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.useAppLanguage();
+                .setMessage(getString(R.string.text0046));
 
         downtoleft = AnimationUtils.loadAnimation(this,R.anim.letftoright);
         downtoup = AnimationUtils.loadAnimation(this,R.anim.downtoup);
         sign_btn.setAnimation(downtoup);
         cardView.setAnimation(downtoleft);
-        channels.addValueEventListener(channelsEvent);
     }
-
-
-    ValueEventListener channelsEvent = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            for (DataSnapshot data:dataSnapshot.getChildren()){
-                Channel channel = data.getValue(Channel.class);
-                assert channel != null;
-                codesGroup.remove(channel.getCode());
-                codesGroup.add(channel.getCode());
-            }
-
-            Log.e("CODE",codesGroup.toString());
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
 
     @OnClick(R.id.signin)
     public void signin(View view){
@@ -140,9 +132,21 @@ public class RegisterActivity extends AppCompatActivity {
         boolean cancel = false;
         errors.clear();
         String code = codeGroupeET.getText().toString();
+        String uname = usernameET.getText().toString();
         String passw = passwordET.getText().toString();
         String repassw = repasswordET.getText().toString();
         String email = emailET.getText().toString();
+
+        if (TextUtils.isEmpty(uname) || !isUnameValid(uname)){
+            focus = usernameET;
+            errors.remove(getString(R.string.text0003));
+            errors.add(getString(R.string.text0003));
+            cancel = true;
+            setEditTextBackgrounDrawable(usernameET,true);
+        }else{
+            errors.remove(getString(R.string.text0003));
+            setEditTextBackgrounDrawable(usernameET,false);
+        }
 
         if (TextUtils.isEmpty(code) || !isCodeGroupValid(code)){
             focus = codeGroupeET;
@@ -194,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity {
             focus.requestFocus();
             displayError();
         }else {
-            signupToFirebase(code, email, passw);
+            signupToServer(uname,code, email, passw);
         }
     }
 
@@ -209,72 +213,89 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void signupToFirebase(final String code, final String email, final String passw) {
+    private void signupToServer(final String uname,final String code, final String email, final String passw) {
         showProgressDialog();
-        final String[] username = {usernameET.getText().toString()};
+        Map<String,Object> map = new HashMap<>();
+        map.put("langKey","en");
+        map.put("password",passw);
+        map.put("email",email);
+        map.put("login",uname);
+        map.put("androidFcmToken", FirebaseInstanceId.getInstance().getToken());
+        service.createAccount(map,code).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                hideProgressDialog();
+                errors.clear();
+                if (response.isSuccessful()){
+                    User user = response.body();
+                    Toasty.success(context,getString(R.string.text0058),Toast.LENGTH_LONG,true).show();
+                    loginUer(user);
+                }else {
+                    if (response.code() == 500) {
+                        try {
+                            errors.add(response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else if(response.code() == 400){
+                        try {
+                            errors.add(ApiError.serverMessage(response.errorBody().string()));
+                            Log.e("ERROR",response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        errors.add(ApiError.message(response.code()));
+                    }
+                    displayError();
+                }
+            }
 
-        firebaseAuth.createUserWithEmailAndPassword(email,passw)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                hideProgressDialog();
+                errors.clear();
+                errors.add(ApiError.inThrawable(t));
+                displayError();
+            }
+        });
+
+    }
+
+    private void loginUer(final User user) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("password",passwordET.getText().toString());
+        map.put("username",user.getEmail());
+        map.put("rememberMe",true);
+        service.authenticate(map)
+                .enqueue(new Callback<AccessToken>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "account created");
-                            Toast.makeText(RegisterActivity.this, "Compte créer avec succès", Toast.LENGTH_SHORT).show();
-                            session.saveDataString("uemail",email);
-                            session.saveDataString("upass",passw);
-                            String uid = task.getResult().getUser().getUid();
-                            username[0] = !TextUtils.isEmpty(username[0])? username[0] :"user-"+System.currentTimeMillis();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(username[0])
-                                    .build();
-                            task.getResult().getUser().updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "User profile updated.");
-                                            }
-                                        }
-                                    });
+                    public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
+                        Log.w(TAG, "onResponse: " + response.body());
+                        hideProgressDialog();
 
-
-                            session.saveDataString("uname",username[0]);
-                            session.saveDataString("uuid",uid);
-
-                            Map<String,Object> chuser = new HashMap<>();
-                            chuser.put("channelID",code);
-                            chuser.put("userID",uid);
-                            User user = new User();
-                            user.setEmail(email);
-                            user.setId(System.currentTimeMillis());
-                            user.setCreatedAt(Utils.currentJodaDateStr());
-                            user.setUid(uid);
-                            user.setChannelID(code);
-                            user.setUsername(username[0]);
-                            //user.setFbID(firebaseAuth.getCurrentUser().getUid());
-                            prospectingRef.child(uid).setValue(user);
-                            channel_user_ref.push().setValue(chuser);
-                            session.saveDataString("user",user.toJson().toString());
-
-                            //Log.e("USER",user.toJson().toString());
-
+                        if (response.isSuccessful()) {
+                            tokenManager.saveToken(response.body());
+                            session.saveDataString(UserHelpers.CURRENT_USER_ID,user.toJson().toString());
                             gotoNextActivity();
                         } else {
-                            Log.d(TAG, "register account failed", task.getException());
-                            Toast.makeText(RegisterActivity.this,
-                                    "account registration failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            errors.clear();
-                            errors.add(task.getException().getMessage());
-
-                            displayError();
+                            gotoLoginPage();
                         }
-                        //hide progress dialog
+                    }
+
+                    @Override
+                    public void onFailure(Call<AccessToken> call, Throwable t) {
                         hideProgressDialog();
+                        Log.e(TAG, "onFailure: " + t.getMessage());
+                        gotoLoginPage();
                     }
                 });
-        ////------------------;
+    }
 
+    private void gotoLoginPage() {
+        startActivity(new Intent(this,LoginActivity.class));
+        finish();
     }
 
     private void gotoNextActivity() {
@@ -290,7 +311,14 @@ public class RegisterActivity extends AppCompatActivity {
         return pass.length() >= 4;
     }
     public boolean isCodeGroupValid(String code){
-        return codesGroup.contains(code);
+        return true;
+    }
+    public boolean isUnameValid(String uname){
+        Matcher mtch = userNamePattern.matcher(uname);
+        if (mtch.matches()) {
+            return true;
+        }
+        return false;
     }
 
     public void setEditTextBackgrounDrawable(EditText editText,boolean error){
@@ -305,7 +333,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (customProgressDialogOne == null) {
             customProgressDialogOne = new CustomProgressDialogOne(this)
                     .builder()
-                    .setMessage("Please wait!");
+                    .setMessage(getString(R.string.text0046));
             //progressDialog.setIndeterminate(true);
         }
         customProgressDialogOne.show();

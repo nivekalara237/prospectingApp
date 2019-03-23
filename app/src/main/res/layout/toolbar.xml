@@ -53,6 +53,7 @@
         android:layout_marginLeft="30dp"
         android:text="Home App"
         android:textSize="13sp"
+        android:singleLine="true"
         android:textAllCaps="true"
         android:textColor="#fafafa"
         android:background="?android:selectableItemBackground"

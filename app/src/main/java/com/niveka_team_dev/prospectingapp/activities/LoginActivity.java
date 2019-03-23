@@ -32,18 +32,32 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.niveka_team_dev.prospectingapp.R;
+import com.niveka_team_dev.prospectingapp.common.ApiError;
+import com.niveka_team_dev.prospectingapp.common.RetrofitBuilder;
+import com.niveka_team_dev.prospectingapp.handlers.TokenManager;
+import com.niveka_team_dev.prospectingapp.handlers.UserHelpers;
 import com.niveka_team_dev.prospectingapp.kernels.Session;
+import com.niveka_team_dev.prospectingapp.models.AccessToken;
+import com.niveka_team_dev.prospectingapp.services.api.AuthApiService;
 import com.niveka_team_dev.prospectingapp.ui.CustomProgressDialogOne;
 import com.niveka_team_dev.prospectingapp.utilities.Utils;
 import com.niveka_team_dev.prospectingapp.models.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -66,6 +80,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference userRef,rootRef,channel_users,channels;
     Session session;
+    private AuthApiService service;
+    private AuthApiService serviceWithAuth;
+    private TokenManager tokenManager;
+    private Call<AccessToken> call;
 
     @VisibleForTesting
     public ProgressDialog progressDialog;
@@ -79,23 +97,20 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login0);
         ButterKnife.bind(this);
         session = new Session(this);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.useAppLanguage();
-        rootRef = FirebaseDatabase.getInstance().getReference();
-        userRef = rootRef.child(Utils.FIREBASE_DB_NAME).child("users");
-        channel_users = rootRef.child(Utils.FIREBASE_DB_NAME).child("channel_users");
-        channels = rootRef.child(Utils.FIREBASE_DB_NAME).child("channels");
+        service = RetrofitBuilder.createService(AuthApiService.class);
+        tokenManager = TokenManager.getInstance(getApplicationContext());
+        serviceWithAuth = RetrofitBuilder.createServiceWithAuth(AuthApiService.class,tokenManager);
 
         if (hasBeenRegister()){
             passwordET.setText(session.retrieveDataString("upass"));
             emailET.setText(session.retrieveDataString("uemail"));
-
-            //startActivity(new Intent(this,MainActivity.class));
-            //finish();
+            startActivity(new Intent(this,MainActivity.class));
+            finish();
         }
+
         customProgressDialogOne = new CustomProgressDialogOne(this)
                                         .builder()
-                                        .setMessage("Please wait!");
+                                        .setMessage(getString(R.string.text0046));//please wait!
 
         //setButtonListeners();
         sign_btn.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +155,7 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.signup)
     public void signup(View view){
         startActivity(new Intent(this,RegisterActivity.class));
+        finish();
     }
 
     @OnClick(R.id.reset_email_btn)
@@ -151,32 +167,31 @@ public class LoginActivity extends AppCompatActivity {
             emailResetPassET.setBackground(ContextCompat.getDrawable(this,R.drawable.edittext_rounded_corners_error));;
             displayError();
         }else {
-            //validateResetPassword()
-            firebaseAuth.sendPasswordResetEmail(email)
-                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(LoginActivity.this,
-                                        "Reset password code has been emailed to "
-                                                + email,
-                                        Toast.LENGTH_SHORT).show();
-                                error.setText(getString(R.string.text0009)+email);
-                                error.setTextColor(Color.WHITE);
-                                error.setBackgroundColor(Color.GREEN);
-                                error.setVisibility(View.VISIBLE);
-                                error.setGravity(Gravity.CENTER);
-                                emailResetPassET.setText("");
-                            } else {
-                                Log.e(TAG, "Error in sending reset password code",
-                                        task.getException());
-                                errors.clear();
-                                errors.add(getString(R.string.text0008));
-                                displayError();
-                            }
+            service.requestResetPassword(email).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    errors.clear();
+                    if (response.isSuccessful()){
+                        errors.add("Une message de réinitialisation vous a été envoyer par cette email." +
+                                "Consultez votre boite email pour suivre les instructions.");
+                        error.setTextColor(Color.GREEN);
+                    }else {
+                        try {
+                            errors.add(response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    });
+                    }
+                    displayError();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    errors.clear();
+                    errors.add(ApiError.inThrawable(t));
+                    displayError();
+                }
+            });
         }
     }
 
@@ -196,7 +211,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean isPasswordValid(String pass){
-        return pass.length() >= 4;
+        return pass.length() >= 3;
     }
 
     private void attemptLogin() {
@@ -208,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
         emailET.setError(null);
         passwordET.setError(null);
 
-        if (TextUtils.isEmpty(em) || !isEmailValid(em)){
+        if (TextUtils.isEmpty(em) /*|| !isEmailValid(em)*/){
             cancel = true;
             focus = emailET;
             errors.remove(getString(R.string.text0010));
@@ -254,9 +269,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean hasBeenRegister(){
-        String lastEmail = session.retrieveDataString("uemail");
+        /*String lastEmail = session.retrieveDataString("uemail");
         String lastPassword = session.retrieveDataString("upass");
-        return !lastEmail.equals("") && !lastPassword.equals("");
+        return !lastEmail.equals("") && !lastPassword.equals("");*/
+        return !tokenManager.getToken().getAccessToken().equals("");
     }
 
     private void  handleRegistrationLogin(){
@@ -269,10 +285,51 @@ public class LoginActivity extends AppCompatActivity {
 
         //show progress dialog
         showProgressDialog();
-        performLogin(email, password);
+        //performLogin(email, password);
+
+        login(email,password);
+
 
         //perform login and account creation depending on existence of email in firebase
         //performLoginOrAccountCreation(email, password);
+    }
+
+    private void login(final String email, String password) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("password",password);
+        map.put("username",email);
+        map.put("rememberMe",true);
+       service.authenticate(map)
+               .enqueue(new Callback<AccessToken>() {
+                   @Override
+                   public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
+                       Log.w(TAG, "onResponse: " + response.body());
+                       hideProgressDialog();
+                       errors.clear();
+
+                       if (response.isSuccessful()) {
+                           tokenManager.saveToken(response.body());
+                           getAccount(email);
+                       } else {
+                           try {
+                               errors.add(ApiError.serverMessage(response.errorBody().string()));
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                           }
+                       }
+
+                       displayError();
+                   }
+
+                   @Override
+                   public void onFailure(Call<AccessToken> call, Throwable t) {
+                       hideProgressDialog();
+                       Log.e(TAG, "onFailure: " + t.getMessage());
+                       errors.clear();
+                       errors.add(ApiError.inThrawable(t));
+                       displayError();
+                   }
+               });
     }
 
     private void performLogin(final String email, final String password) {
@@ -287,7 +344,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             String uid = task.getResult().getUser().getUid();
                             User user = new User();
-                            user.setUid(uid);
+                            user.setId(uid);
                             user.setEmail(email);
                             userRef.child(uid).addValueEventListener(userValueEventListener);
 
@@ -317,7 +374,7 @@ public class LoginActivity extends AppCompatActivity {
             //Log.e("U1111111",dataSnapshot.getValue().toString());
             if(user!=null){
                 //assert user != null;
-                session.saveDataString("user",user.toJson().toString());
+                //session.saveDataString("user",user.toJson().toString());
                 //Log.e("U1111111",user.toString());
                 //Log.e("U2222222",user.toJson().toString());
                 gotoNextActivity();
@@ -349,17 +406,17 @@ public class LoginActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(email)) {
             emailET.setError("Required.");
             valid = false;
-        }else if(!email.contains("@")){
+        }/*else if(!email.contains("@")){
             emailET.setError("Not an email id.");
             valid = false;
-        } else{
+        }*/ else{
             emailET.setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
             passwordET.setError("Required.");
             valid = false;
-        }else if(password.length() < 6){
+        }else if(password.length() < 4){
             passwordET.setError("Min 6 chars.");
             valid = false;
         }else {
@@ -383,20 +440,6 @@ public class LoginActivity extends AppCompatActivity {
         customProgressDialogOne.dismiss();
     }
 
-  /*  public void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Please wait!");
-            progressDialog.setIndeterminate(true);
-        }
-        progressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-    }*/
     private void showAppropriateOptions(){
 
     }
@@ -405,5 +448,67 @@ public class LoginActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         hideProgressDialog();
+    }
+
+    public void getAccount(String login){
+        serviceWithAuth.account().enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                hideProgressDialog();
+                if (response.isSuccessful()){
+                    User user = response.body();
+                    if (user!=null){
+                        updateToken(user.getId());
+                        session.saveDataString(UserHelpers.CURRENT_USER_ID,user.toJson().toString());
+                        gotoNextActivity();
+                    }
+                }else{
+                    errors.clear();
+                    try {
+                        errors.add(ApiError.serverMessage(response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    displayError();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                hideProgressDialog();
+                errors.clear();
+                errors.add(ApiError.inThrawable(t));
+                displayError();
+            }
+        });
+    }
+
+    public void updateToken(String uid){
+        Map<String,String> map = new HashMap<>();
+        map.put("type","android");
+        map.put("token", FirebaseInstanceId.getInstance().getToken());
+        serviceWithAuth.updateToken(map,uid).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        Log.e("OK",response.body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    try {
+                        Log.e("ERROR",response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("THROWABLE",t.getMessage());
+            }
+        });
     }
 }

@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addProspect(View view) {
         Intent i = new Intent();
-        i.setClass(this, ProspectionActivity.class);
+        i.setClass(this, SuiviActivity.class);
         startActivity(i);
     }
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void forum(View view) {
         Intent i = new Intent();
-        i.setClass(this, ForumCommerciauxActivity.class);
+        i.setClass(this, ChannelActivity.class);
         startActivity(i);
     }
 

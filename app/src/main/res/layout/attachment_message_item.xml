@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:padding="3dp"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:id="@+id/icon"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/ic_check_24dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/file_attached" />
+
+    <TextView
+        android:layout_width="64dp"
+        android:id="@+id/title"
+        android:text="ksdlkjlklklkmkmlklsj.pdf"
+        android:textSize="5sp"
+        android:layout_below="@+id/icon"
+        android:layout_marginTop="0dp"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:fontFamily="@font/futura_medium_bt"
+        android:layout_height="wrap_content"
+        tools:ignore="SmallSp" />
+
+    <ImageButton
+        android:layout_width="12dp"
+        android:src="@drawable/ic_unchecked_red_32dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/icon"
+        android:id="@+id/remove"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="-9.5dp"
+        android:layout_height="12dp"
+        android:contentDescription="@string/remove"
+        android:layout_marginStart="-9.5dp"
+        android:layout_toEndOf="@+id/icon" />
+
+</RelativeLayout>

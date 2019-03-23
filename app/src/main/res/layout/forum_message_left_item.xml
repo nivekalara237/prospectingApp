@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,7 +14,7 @@
         android:background="@drawable/circle"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:layout_alignParentLeft="true"/>
 
     <TextView
         android:id="@+id/message_name"
@@ -23,35 +23,112 @@
         android:layout_height="wrap_content"
         android:textSize="10sp"
         android:fontFamily="@font/futura_medium_bt"
-        app:layout_constraintLeft_toRightOf="@+id/image_message_profile"
+        android:layout_toRightOf="@+id/image_message_profile"
         android:layout_marginLeft="8dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="6dp" />
 
-    <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
-        android:id="@+id/message_body"
-        android:text="hi man, how are you? dddsds  sd s d s s d s d s d s d  s d"
-        android:background="@drawable/rounded_rectangle_message_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="240dp"
-        android:padding="8dp"
-        android:textColor="#ffffff"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/futura_medium_bt"
-        app:layout_constraintTop_toBottomOf="@+id/message_name"
-        app:layout_constraintLeft_toRightOf="@+id/image_message_profile"
-        android:layout_marginLeft="8dp" />
+
 
     <TextView
         android:id="@+id/message_time"
         android:text="11:40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
-        app:layout_constraintLeft_toRightOf="@+id/message_body"
+        android:textSize="8sp"
+        android:textStyle="italic"
+        android:layout_toRightOf="@+id/msgLayout"
         android:layout_marginLeft="4dp"
         android:fontFamily="@font/futura_medium_bt"
-        app:layout_constraintBottom_toBottomOf="@+id/message_body" />
+        android:layout_below="@+id/msgLayout" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/msgLayout"
+        android:padding="5dp"
+        android:layout_toRightOf="@+id/image_message_profile"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:visibility="visible"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/message_name"
+        android:layout_height="wrap_content">
+        <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
+            android:id="@+id/message_body"
+            android:text="hi man, how are you? dddsds  sd s d s s d s d s d s d  s d"
+            android:background="@drawable/rounded_rectangle_message_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="240dp"
+            android:padding="8dp"
+            android:visibility="visible"
+            android:textColor="#ffffff"
+            android:fontFamily="@font/futura_medium_bt" />
 
-</android.support.constraint.ConstraintLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/imageLayout"
+            android:padding="5dp"
+            android:maxWidth="240dp"
+            android:visibility="gone"
+            android:background="@drawable/bg_message_right_image"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:id="@+id/attachement"
+                android:src="@drawable/ic_list_128dp"
+                android:scaleType="center"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/progress_value"
+                android:text="123/200Ko"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/futura_medium_bt"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="6dp"
+                android:layout_height="wrap_content" />
+            <ProgressBar
+                android:layout_width="24dp"
+                android:id="@+id/file_progress_bar"
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                android:progressTint="@android:color/white"
+                android:progressBackgroundTint="@android:color/white"
+                android:layout_height="24dp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:weightSum="3"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_file_download"
+                android:id="@+id/errorLayout"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/dimen_16"
+                android:paddingRight="@dimen/dimen_16"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_file_download_24dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:text="23Ko"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/futura_medium_bt"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -56,7 +56,8 @@
             android:layout_marginRight="16dp"
             android:textAllCaps="false"
             android:background="@drawable/buttonstyle2"
-            android:text="@string/text0027" />
+            android:text="@string/text0027"
+            tools:ignore="NestedWeights" />
 
         <Button
             android:id="@+id/signin"

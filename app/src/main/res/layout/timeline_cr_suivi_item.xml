@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginLeft="10dp"
+    android:layout_width="match_parent">
+
+    <com.github.vipulasri.timelineview.TimelineView
+        android:id="@+id/timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:markerSize="28dp"
+        app:lineWidth="3dp"
+        app:marker="@drawable/ic_hourglass_black_32dp"
+        app:markerInCenter="true"
+        app:startLineColor="@color/flatui_pumpkin"
+        app:endLineColor="@color/flatui_pumpkin"
+        app:lineStyle="normal"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        app:contentPadding="6dp"
+        android:layout_toRightOf="@+id/timeline"
+        app:cardCornerRadius="6dp"
+        android:id="@+id/cardview"
+        app:cardElevation="7dp"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:id="@+id/icon_date"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/ic_time_left_white_32dp"
+                android:layout_height="22dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:padding="2dp"
+                android:text="23 Fev. 2019"
+                android:textSize="12sp"
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/icon_date"
+                android:layout_marginLeft="4dp"
+                android:textStyle="bold"
+                android:id="@+id/date_rdv"
+                android:fontFamily="@font/futura_medium_bt"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:padding="3dp"
+                android:text="Plusieurs variations de Lorem Ipsum peuvent être trouvées ici ou là, mais la majeure partie d'entre elles a été altérée par l'addition d'humour ou de mots aléatoires qui ne ressemblent pas une seconde à du texte standard. Si vous voulez utiliser un passage du Lorem Ipsum, vous devez être sûr qu'il n'y a rien d'embarrassant caché dans le texte. Tous les générateurs de Lorem Ipsum sur Internet tendent à reproduire le même extrait sans fin,"
+                android:textSize="11sp"
+                android:layout_below="@+id/icon_date"
+                android:id="@+id/content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/icon_date"
+                android:layout_marginLeft="4dp"
+                android:textStyle="normal"
+                android:fontFamily="@font/futura_medium_bt"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:padding="2dp"
+                android:text="@string/add_at_2019_11_23_n_08_23"
+                android:textSize="9sp"
+                android:fontFamily="@font/futura_medium_bt"
+                android:textColor="@color/flatui_asbestos"
+                android:id="@+id/created_at"
+                android:textAlignment="textEnd"
+                android:layout_below="@+id/content"
+                android:layout_marginTop="7dp"
+                android:layout_toLeftOf="@+id/validate"
+                android:layout_marginRight="4dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
+
+            <Button
+                android:layout_width="44dp"
+                android:id="@+id/validate"
+                android:text="Validated"
+                android:fontFamily="@font/futura_medium_bt"
+                android:textSize="8sp"
+                android:background="@color/flatui_belize_hole"
+                android:textColor="@android:color/white"
+                android:layout_alignParentRight="true"
+                android:textAllCaps="false"
+                android:layout_marginTop="9dp"
+                android:layout_below="@+id/content"
+                android:layout_height="22dp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

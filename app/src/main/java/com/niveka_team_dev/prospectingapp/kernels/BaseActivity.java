@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.niveka_team_dev.prospectingapp.activities.LoginActivity;
+import com.niveka_team_dev.prospectingapp.handlers.TokenManager;
 import com.niveka_team_dev.prospectingapp.handlers.UserHelpers;
 import com.niveka_team_dev.prospectingapp.models.User;
 import com.zplesac.connectionbuddy.interfaces.ConnectivityChangeListener;
@@ -19,10 +20,12 @@ public class BaseActivity  extends AppCompatActivity implements ConnectivityChan
 
     public  Session session  = null;
     public User currentUser=null;
+    public TokenManager tokenManager;
     @Override
     protected void onCreate(Bundle state){
         super.onCreate(state);
         session = new Session(this);
+        tokenManager = TokenManager.getInstance(this);
         currentUser = UserHelpers.getCurrentUser(this);
         if (currentUser==null){
             startActivity(new Intent(this, LoginActivity.class));

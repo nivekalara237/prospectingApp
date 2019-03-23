@@ -66,4 +66,9 @@
         <item name="android:textColorSecondary">@color/lightorange</item>
     </style>
 
+
+    <style name="PixAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:screenOrientation">portrait</item>
+    </style>
+
 </resources>

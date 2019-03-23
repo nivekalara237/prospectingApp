@@ -25,8 +25,7 @@ public class UserHelpers {
 
     public  static User jsonToPOJO(JSONObject json) throws JSONException {
         ObjectMapper mapper = new ObjectMapper();
-        User pojo = mapper.convertValue(JsonHelper.fromJson(json), User.class);
-        return pojo;
+        return mapper.convertValue(JsonHelper.fromJson(json), User.class);
     }
 
     public static User getCurrentUser(Context c){

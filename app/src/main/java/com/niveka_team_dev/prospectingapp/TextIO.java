@@ -8,6 +8,10 @@ import org.joda.time.format.DateTimeFormat;
 
 public class TextIO {
     public static void main(String []args){
+
+
+        System.out.println("RANDOM = "+Utils.ramdomString(24));
+
         final DateTime today = new DateTime().toDateTime();
         System.out.println(today.toString());
         System.out.println(today.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssSZZ")));

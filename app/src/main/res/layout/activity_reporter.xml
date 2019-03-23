@@ -75,7 +75,7 @@
                         android:id="@+id/object"
                         android:layout_width="match_parent"
                         android:fontFamily="@font/futura_medium_bt"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:textColorHint="@color/colorApp3"
                         android:layout_height="wrap_content"
                         android:hint="@string/text0031" />
@@ -92,7 +92,7 @@
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:textColorHint="@color/colorApp3"
                         android:fontFamily="@font/futura_medium_bt"
                         android:inputType="textWebEmailAddress"
@@ -125,7 +125,7 @@
                 <RadioGroup
                     android:id="@+id/radiogroup"
                     android:layout_below="@+id/impression_l"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -151,8 +151,46 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:text="@string/add"
+                    android:text="+ Attachments"
+                    android:textStyle="bold"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp"
                     android:layout_below="@+id/radiogroup"
+                    android:textSize="11sp"
+                    android:background="@android:color/transparent"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingRight="@dimen/dimen_16"
+                    android:paddingLeft="5dp"
+                    android:id="@+id/attachment_btn"
+                    android:fontFamily="@font/futura_medium_bt"
+                    android:textAllCaps="false"
+                    android:textColor="@color/flatui_peter_river"
+                    android:layout_height="35dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="(04)"
+                    android:id="@+id/nb_attachment"
+                    android:fontFamily="@font/futura_medium_bt"
+                    android:textSize="11sp"
+                    android:textColor="@color/flatui_peter_river"
+                    android:padding="3dp"
+                    android:gravity="center"
+                    android:layout_below="@+id/radiogroup"
+                    android:layout_toRightOf="@+id/attachment_btn"
+                    android:layout_height="35dp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/recyclerViewFile"
+                    android:layout_below="@+id/attachment_btn"
+                    android:orientation="horizontal"
+                    android:layout_height="55dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:text="@string/add"
+                    android:layout_below="@+id/recyclerViewFile"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/buttonstyle3"
                     android:paddingLeft="20dp"

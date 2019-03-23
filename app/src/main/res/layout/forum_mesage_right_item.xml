@@ -19,6 +19,7 @@
         android:elevation="2dp"
         android:textSize="12sp"
         android:maxWidth="240dp"
+        android:visibility="visible"
         android:layout_alignParentRight="true"
         android:text="Placeholder message :( :D"
         android:fontFamily="@font/futura_medium_bt"
@@ -56,6 +57,73 @@
             android:layout_marginLeft="4dp"
             android:fontFamily="@font/futura_medium_bt"/>
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/imageLayout"
+        android:layout_alignParentEnd="true"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:background="@drawable/bg_message_right_image"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/attachement"
+            android:src="@drawable/background"
+            android:scaleType="fitCenter"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/progress_value"
+            android:text="123/200Ko"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/futura_medium_bt"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="6dp"
+            android:layout_height="wrap_content" />
+        <ProgressBar
+            android:layout_width="24dp"
+            android:id="@+id/file_progress_bar"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:progressTint="@android:color/white"
+            android:progressBackgroundTint="@android:color/white"
+            android:layout_height="24dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:weightSum="3"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bg_file_download"
+            android:id="@+id/errorLayout"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:visibility="gone"
+            android:paddingLeft="@dimen/dimen_16"
+            android:paddingRight="@dimen/dimen_16"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_file_download_24dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:text="23Ko"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/futura_medium_bt"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

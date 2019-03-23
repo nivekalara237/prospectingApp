@@ -3,10 +3,11 @@ package com.niveka_team_dev.prospectingapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Prospect implements Parcelable{
+public class Prospect implements Parcelable, Serializable {
     private long id;
     private String email;
     private String telephone;

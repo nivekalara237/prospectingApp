@@ -1,6 +1,7 @@
 package com.niveka_team_dev.prospectingapp.kernels;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.niveka_team_dev.prospectingapp.handlers.FontsOverride;
 import com.zplesac.connectionbuddy.ConnectionBuddy;
@@ -8,7 +9,7 @@ import com.zplesac.connectionbuddy.ConnectionBuddyConfiguration;
 
 import net.ralphpina.permissionsmanager.PermissionsManager;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     @Override
     public void onCreate() {

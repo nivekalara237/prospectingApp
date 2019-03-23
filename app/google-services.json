@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "1111974524",
-    "firebase_url": "https://prospectingapp-11ce5.firebaseio.com",
-    "project_id": "prospectingapp-11ce5",
-    "storage_bucket": "prospectingapp-11ce5.appspot.com"
+    "project_number": "710617461730",
+    "firebase_url": "https://fire-d-5399e.firebaseio.com",
+    "project_id": "fire-d-5399e",
+    "storage_bucket": "fire-d-5399e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1111974524:android:13b0a004b7cc76c4",
+        "mobilesdk_app_id": "1:710617461730:android:13b0a004b7cc76c4",
         "android_client_info": {
           "package_name": "com.niveka_team_dev.prospectingapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1111974524-uo0v03d1eon0b750lvv88tog3hidu51g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.niveka_team_dev.prospectingapp",
-            "certificate_hash": "5a984c16097c975e6db2b36e3afecf6a0101b60e"
-          }
-        },
-        {
-          "client_id": "1111974524-2i276ofn3hp8p7nhphrbcrp7vq83hhis.apps.googleusercontent.com",
+          "client_id": "710617461730-oqd598iqh7t2t35pk8uv4eou6qv7t2uc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCwGH7t8x5C6SWqEBIbukibeRvKnAo1XPY"
+          "current_key": "AIzaSyDI5zuuULfyUPWEMLdBaJliR8eWjsGFG08"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1111974524-2i276ofn3hp8p7nhphrbcrp7vq83hhis.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

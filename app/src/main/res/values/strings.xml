@@ -9,8 +9,8 @@
     <string name="repassword">Confirmez mot de passe</string>
     <string name="email">Votre Adresse E-mail</string>
     <string name="sign_in">Sign in</string>
-    <string name="code_group">Code de votre groupe</string>
-    <string name="text0003">Code invalide</string>
+    <string name="code_group">Identifiant FireD de l\'entreprise</string>
+    <string name="text0003">Identifiant invalide</string>
     <string name="text0004">Adresse E-mail invalide</string>
     <string name="text0005">Mot de passe érroné</string>
     <string name="text0006">Vous avec saisi un mot de passe différent</string>
@@ -55,7 +55,7 @@
     <string name="cancel">Cancel</string>
     <string name="text0043">aucune</string>
     <string name="text0044">[ Technique ]</string>
-    <string name="text0045">[ Générele ]</string>
+    <string name="text0045">[ Générale ]</string>
     <string name="text0046">Please wait!</string>
     <string name="forum_com_title">Forum Commerc…</string>
     <string name="a_propos">A propos?</string>
@@ -73,4 +73,18 @@
     <string name="text0055">Email invalide</string>
     <string name="text0056">User granted location.</string>
     <string name="text0057">User denied location.</string>
+    <string name="default_notification_channel_id">default_channel_id</string>
+    <string name="default_notification_channel_title">Default Channel</string>
+    <string name="text0058">Account has been successfully created...</string>
+    <string name="channel_list_title">Groupes</string>
+    <string name="add_at_2019_11_23_n_08_23">2019–11-23 \n 08:23</string>
+    <string name="crs_list_title">Comptes rendus suivi</string>
+    <string name="add_new">+ add new</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="file_attached">file attached</string>
+    <string name="remove">Remove</string>
+    <string name="text0059">tape a message</string>
+    <string name="firedapp_directory">FIRE-D-APP</string>
 </resources>

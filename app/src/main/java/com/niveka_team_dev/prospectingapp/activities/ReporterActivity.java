@@ -10,7 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +33,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.niveka_team_dev.prospectingapp.R;
+import com.niveka_team_dev.prospectingapp.adapters.AttachmentAdapter;
+import com.niveka_team_dev.prospectingapp.fragments.AddCompteRenduSuiviBottomSheetFragment;
+import com.niveka_team_dev.prospectingapp.fragments.AttachmentOptionsBottomSheetDialogFragment;
 import com.niveka_team_dev.prospectingapp.handlers.LocationHelper;
+import com.niveka_team_dev.prospectingapp.listeners.OnRemoveItemAttachmentListener;
+import com.niveka_team_dev.prospectingapp.models.Attachment;
 import com.niveka_team_dev.prospectingapp.services.LocationMonitoringService;
 import com.niveka_team_dev.prospectingapp.ui.CustomProgressDialogOne;
 import com.niveka_team_dev.prospectingapp.utilities.Utils;
@@ -48,28 +56,36 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 import rx.functions.Action1;
+import zendesk.belvedere.BelvedereUi;
+import zendesk.belvedere.ImageStream;
+import zendesk.belvedere.MediaResult;
 
-public class ReporterActivity extends BaseActivity implements ValueEventListener,RadioGroup.OnCheckedChangeListener {
+public class ReporterActivity extends BaseActivity implements OnRemoveItemAttachmentListener,ImageStream.Listener, ValueEventListener,RadioGroup.OnCheckedChangeListener {
 
     @BindView(R.id.contenu) EditText contenu;
     @BindView(R.id.email) EditText emailsCopies;
     @BindView(R.id.email_l) TextInputLayout emailLayout;
     @BindView(R.id.object) EditText objet;
     @BindView(R.id.error) TextView error;
+    @BindView(R.id.nb_attachment) TextView nbAttachment;
     @BindView(R.id.radiogroup) RadioGroup radioGroup;
     @BindView(R.id.radio_technique) RadioButton radioTechn;
     @BindView(R.id.radio_generale) RadioButton radioGen;
     @BindView(R.id.save) Button save;
+    @BindView(R.id.recyclerViewFile) RecyclerView recyclerViewFile;
 
     private Location gpsLocation = null;
     Context context;
     private DatabaseReference rootRef,reportRef,usersRef;
     private int radioCheck = 1;
     private List<User> users = new ArrayList<>();
+    private List<Attachment> attachments = new ArrayList<>();
     List<String> errors = new ArrayList<>();
-
+    private ImageStream imageStream;
+    private AttachmentAdapter attachmentAdapter;
     ChildEventListener userEvent = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -156,6 +172,9 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reporter);
         ButterKnife.bind(this);
+        imageStream = BelvedereUi.install(this);
+        imageStream.addListener(this);
+
         context = this;
         onAskForLocation();
         rootRef = FirebaseDatabase.getInstance().getReference();
@@ -179,6 +198,13 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         //contenu.setTextIsSelectable(true);
         //objet.setTextIsSelectable(true);
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocationeReceiver,new IntentFilter(LocationMonitoringService.ACTION_LOCATION_BROADCAST));
+
+        nbAttachment.setText("(0)");
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        attachmentAdapter = new AttachmentAdapter(attachments,this);
+        recyclerViewFile.setLayoutManager(layoutManager);
+        recyclerViewFile.setAdapter(attachmentAdapter);
+        recyclerViewFile.setVisibility(View.GONE);
     }
 
     private void attemptSavely() {
@@ -225,7 +251,7 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
             String gpsloc = gpsLocation.getLatitude()+";"+gpsLocation.getLongitude();
             rapport.setPosition(gpsloc);
         }
-        rapport.setNomCom(currentUser.getUsername());
+        rapport.setNomCom(currentUser.getLogin());
         rapport.setEmail(currentUser.getEmail());
         rapport.setDate(Utils.currentJodaDateStr());
         Map<String,Object> map = rapport.toMap();
@@ -271,8 +297,8 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
     public List<String> getUsersField(String field){
         List<String> fields =  new ArrayList<>();
         for (User u:users){
-            if (field.equals("uid"))
-                fields.add(u.getUid());
+            if (field.equals("id"))
+                fields.add(u.getId());
             else if (field.equals("email"))
                 fields.add(u.getEmail());
             else if (field.equals("id"))
@@ -327,6 +353,25 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
         super.onPause();
     }
 
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @OnClick(R.id.attachment_btn)
+    public void addNew(View view){
+        /*AttachmentOptionsBottomSheetDialogFragment fragment = AttachmentOptionsBottomSheetDialogFragment.newInstance();
+        fragment.show(getSupportFragmentManager(),"attachment_bottom_sheet_fregment");*/
+        BelvedereUi.imageStream(this)
+                .withCameraIntent()
+                //.withCameraIntent()
+                .withDocumentIntent("*/*", true)
+                .showPopup(this);
+    }
+
     public void showProgressDialog() {
         if (customProgressDialogOne == null) {
             customProgressDialogOne = new CustomProgressDialogOne(this)
@@ -354,6 +399,60 @@ public class ReporterActivity extends BaseActivity implements ValueEventListener
                                     .show();
                         }
                     });
+        }
+    }
+
+    @Override
+    public void onDismissed() {
+
+    }
+
+    @Override
+    public void onVisible() {
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onMediaSelected(List<MediaResult> mediaResults) {
+        List<Attachment> attachss = new ArrayList<>();
+        for (MediaResult media:mediaResults){
+            Attachment attch = new Attachment();
+            attch.setName(media.getName());
+            attch.setLength(media.getSize());
+            attch.setPath(media.getUri().getPath());
+            attch.setType(media.getMimeType());
+
+            if (media.getMimeType().toLowerCase().contains("image/"))
+                attch.setImage(true);
+            else
+                attch.setImage(false);
+
+            attachss.add(attch);
+        }
+
+        if (attachss.size()!=0){
+            recyclerViewFile.setVisibility(View.VISIBLE);
+            nbAttachment.setText("("+ attachss.size() +")");
+            attachments = attachss;
+            attachmentAdapter.addAttachments(attachss);
+        }
+    }
+
+    @Override
+    public void onMediaDeselected(List<MediaResult> mediaResults) {
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void removeAttachment(Attachment attachment) {
+        Toast.makeText(this,"Removing "+attachment.getName(),Toast.LENGTH_SHORT).show();
+        attachmentAdapter.rempoveAttach(attachment);
+        this.attachments.remove(attachment);
+        nbAttachment.setText("("+this.attachments.size()+")");
+        if (this.attachments.size()==0){
+            recyclerViewFile.setVisibility(View.GONE);
         }
     }
 }

@@ -33,10 +33,24 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        android:weightSum="10"
         android:id="@+id/bottomLayout"
         android:layout_height="wrap_content">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:id="@+id/fileFragmentLayout"
+            android:layout_above="@+id/editTextLayout"
+            android:layout_marginBottom="@dimen/dimen_16"
+            android:visibility="visible"
+            android:background="#ffffff"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:layout_height="90dp">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/recyclerViewFile"
+
+                android:layout_height="match_parent"/>
+        </FrameLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,18 +78,18 @@
 
             <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
                 android:id="@+id/new_message"
-                emojicon:emojiconSize="16sp"
+                app:emojiconSize="17.5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
-                android:hint="tape a message"
+                android:hint="@string/text0059"
                 android:maxLines="5"
                 android:minLines="1"
                 android:inputType="textMultiLine"
                 android:gravity="center_vertical|start"
                 android:fontFamily="@font/futura_medium_bt"
-                android:padding="3dp"
-                android:textSize="14sp"
+                android:padding="6dp"
+                android:textSize="16sp"
                 android:background="@android:color/transparent"
                 android:layout_width="0dp" />
 

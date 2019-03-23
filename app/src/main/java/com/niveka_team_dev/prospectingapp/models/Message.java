@@ -5,37 +5,51 @@ import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message implements Serializable,Parcelable {
-    private long id;
-    private String body;
+    private String id;
+    private String contenu;
     private String time;
-    private String channelID;
+    private String channelId;
     private String key;
+    private User user;
     @JsonIgnore
-    private User sender;
-    private long senderId;
-    private long receiverId;
-    private String senderName;
-    private boolean seen;
+    private String userId;
+    @JsonIgnore
+    private String receiverId;
+    private String createdAt;
+    private String updatedAt;
+    private String deletedAt;
+    private boolean vu;
+    private Attachment attachment;
+
+    @JsonIgnore
+    private String[] listSeen;
 
     public Message() {
     }
 
     protected Message(Parcel in) {
-        id = in.readLong();
-        body = in.readString();
+        id = in.readString();
+        contenu = in.readString();
         time = in.readString();
-        channelID = in.readString();
+        channelId = in.readString();
         key = in.readString();
-        senderId = in.readLong();
-        receiverId = in.readLong();
-        senderName = in.readString();
-        seen = in.readByte() != 0;
+        user = in.readParcelable(User.class.getClassLoader());
+        userId = in.readString();
+        receiverId = in.readString();
+        createdAt = in.readString();
+        updatedAt = in.readString();
+        deletedAt = in.readString();
+        vu = in.readByte() != 0;
+        attachment = in.readParcelable(Attachment.class.getClassLoader());
+        listSeen = in.createStringArray();
     }
 
     public static final Creator<Message> CREATOR = new Creator<Message>() {
@@ -50,36 +64,28 @@ public class Message implements Serializable,Parcelable {
         }
     };
 
-    public boolean isSeen() {
-        return seen;
+    public boolean isVu() {
+        return vu;
     }
 
-    public void setSeen(boolean seen) {
-        this.seen = seen;
+    public void setVu(boolean seen) {
+        this.vu = seen;
     }
 
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public String getContenu() {
+        return contenu;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setContenu(String contenu) {
+        this.contenu = contenu;
     }
 
     public String getTime() {
@@ -90,14 +96,6 @@ public class Message implements Serializable,Parcelable {
         this.time = time;
     }
 
-    public String getChannelID() {
-        return channelID;
-    }
-
-    public void setChannelID(String channelID) {
-        this.channelID = channelID;
-    }
-
     public String getKey() {
         return key;
     }
@@ -106,62 +104,104 @@ public class Message implements Serializable,Parcelable {
         this.key = key;
     }
 
-    public User getSender() {
-        return sender;
+    public User getUser() {
+        return user;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setUser(User sender) {
+        this.user = sender;
     }
 
-    public long getSenderId() {
-        return senderId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setSenderId(long senderId) {
-        this.senderId = senderId;
+    public void setUserId(String senderId) {
+        this.userId = senderId;
     }
 
-    public long getReceiverId() {
+    public String getReceiverId() {
         return receiverId;
     }
 
-    public void setReceiverId(long receiverId) {
+    public void setReceiverId(String receiverId) {
         this.receiverId = receiverId;
     }
 
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(String deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public String[] getListSeen() {
+        return listSeen;
+    }
+
+    public void setListSeen(String[] listSeen) {
+        this.listSeen = listSeen;
+    }
+
+    public Attachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(Attachment attachment) {
+        this.attachment = attachment;
+    }
 
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", body='" + body + '\'' +
+                ", body='" + contenu + '\'' +
                 ", time='" + time + '\'' +
-                ", channelID='" + channelID + '\'' +
+                ", channelID='" + channelId + '\'' +
                 ", key='" + key + '\'' +
-                ", sender=" + sender +
-                ", senderId=" + senderId +
-                ", senderName=" + senderName +
+                ", sender=" + user +
+                ", senderId=" + userId +
                 ", receiverId=" + receiverId +
-                ", seedn=" + seen +
+                ", seedn=" + vu +
+                ", Attachment=" +attachment+
                 '}';
     }
 
 
     public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("id",id);
-        map.put("body",body);
-        map.put("time",time);
-        map.put("channelID",channelID);
-        map.put("key",key);
-        map.put("sender",sender);
-        map.put("senderName",senderName);
-        map.put("senderId",senderId);
-        map.put("receiverId",receiverId);
-        map.put("seen",seen);
-        return map;
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(this,Map.class);
     }
+
+    public JSONObject toJSON(){
+        return new JSONObject(toMap());
+    }
+
 
     @Override
     public int describeContents() {
@@ -170,14 +210,19 @@ public class Message implements Serializable,Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(body);
+        parcel.writeString(id);
+        parcel.writeString(contenu);
         parcel.writeString(time);
-        parcel.writeString(channelID);
+        parcel.writeString(channelId);
         parcel.writeString(key);
-        parcel.writeLong(senderId);
-        parcel.writeLong(receiverId);
-        parcel.writeString(senderName);
-        parcel.writeByte((byte) (seen ? 1 : 0));
+        parcel.writeParcelable(user, i);
+        parcel.writeString(userId);
+        parcel.writeString(receiverId);
+        parcel.writeString(createdAt);
+        parcel.writeString(updatedAt);
+        parcel.writeString(deletedAt);
+        parcel.writeByte((byte) (vu ? 1 : 0));
+        parcel.writeParcelable(attachment,i);
+        parcel.writeStringArray(listSeen);
     }
 }
